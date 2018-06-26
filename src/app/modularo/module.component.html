@@ -1,0 +1,9 @@
+<h1>Modularo here</h1>
+
+<p-sidebar [(visible)]="display" position="right">
+  <app-admin-side-panel [mainComponent]="this"></app-admin-side-panel>
+</p-sidebar>
+
+<button type="text" (click)="display = true" pButton icon="pi pi-plus" label="Show"></button>
+
+<ng-template #container></ng-template>

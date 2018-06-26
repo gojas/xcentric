@@ -1,0 +1,8 @@
+<div *ngFor="let componentRegistryConfiguration of componentRegistryConfigurations">
+  <button
+    pButton
+    (click)="onComponentRegistryConfigurationClick($event, componentRegistryConfiguration)"
+    type="button"
+    label="{{componentRegistryConfiguration.name}}"
+  ></button>
+</div>

@@ -23,6 +23,9 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/primeng/resources/themes/omega/theme.css",
+              "node_modules/primeng/resources/primeng.min.css",
+              "node_modules/primeicons/primeicons.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -115,6 +118,46 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": "e2e/tsconfig.e2e.json",
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "xcentric": {
+      "root": "projects/xcentric",
+      "sourceRoot": "projects/xcentric/src",
+      "projectType": "library",
+      "prefix": "xcentric",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/xcentric/tsconfig.lib.json",
+            "project": "projects/xcentric/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "project": "projects/xcentric/ng-package.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/xcentric/src/test.ts",
+            "tsConfig": "projects/xcentric/tsconfig.spec.json",
+            "karmaConfig": "projects/xcentric/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/xcentric/tsconfig.lib.json",
+              "projects/xcentric/tsconfig.spec.json"
+            ],
             "exclude": [
               "**/node_modules/**"
             ]
