@@ -9,6 +9,9 @@ import {SidebarModule} from 'primeng/sidebar';
 import {ButtonModule} from 'primeng/button';
 import {SidePanelComponent} from './modularo/admin/side-panel/side-panel.component';
 import {GridComponent} from './modularo/component/grid/grid.component';
+import {PanelComponent} from './modularo/component/panel/panel.component';
+import {ButtonComponent} from './modularo/component/button/button.component';
+import {InputTextComponent} from './modularo/component/input-text/input-text.component';
 
 
 @NgModule({
@@ -20,7 +23,10 @@ import {GridComponent} from './modularo/component/grid/grid.component';
     SidePanelComponent,
 
     // generics
-    GridComponent
+    GridComponent,
+    PanelComponent,
+    ButtonComponent,
+    InputTextComponent
   ],
   imports: [
     BrowserModule,
@@ -30,7 +36,10 @@ import {GridComponent} from './modularo/component/grid/grid.component';
     ButtonModule
   ],
   entryComponents: [
-    GridComponent
+    GridComponent,
+    PanelComponent,
+    ButtonComponent,
+    InputTextComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,5 +1,12 @@
-import { Injectable, ComponentRef, ComponentFactoryResolver, ViewContainerRef, Renderer2, RendererFactory2 } from '@angular/core';
-import {ComponentConfiguration} from '../component-configuration';
+import {
+  Injectable,
+  ComponentRef,
+  ComponentFactoryResolver,
+  ViewContainerRef,
+  Renderer2,
+  RendererFactory2
+} from '@angular/core';
+
 import {ModuleComponent} from '../../module.component';
 
 @Injectable({
