@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
-import {ComponentConfiguration} from './component-configuration';
+import {AbstractComponent} from '../component/abstract.component';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ComponentManagerService {
-  public collection: ComponentConfiguration[] = [];
+  public collection: AbstractComponent[] = [];
 
-  public add(componentConfiguration: ComponentConfiguration): this {
-    this.collection.push(componentConfiguration);
+  public add(component: AbstractComponent): this {
+    this.collection.push(component);
 
     return this;
   }
 
-  public getAll(): ComponentConfiguration[] {
+  public getAll(): AbstractComponent[] {
     return this.collection;
   }
 }

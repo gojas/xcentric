@@ -24,10 +24,11 @@ export class ComponentRendererService {
     this.renderer = rendererFactory.createRenderer(null, null);
   }
 
-  public renderComponent(component: any, renderTo: ViewContainerRef) {
-
+  public renderComponent(component: any, renderTo: ViewContainerRef): any {
     const componentRef = this.renderTo(component, renderTo),
       componentInstance = componentRef.instance;
+
+    return componentInstance;
   }
 
   public removeComponents(): ComponentRendererService {

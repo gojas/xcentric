@@ -30,11 +30,9 @@ export class SidePanelComponent implements OnInit {
   public onComponentRegistryConfigurationClick(event: any, componentRegistryConfiguration: ComponentRegistryConfiguration): void {
     const configuration = new ComponentConfiguration('1', 'New One', componentRegistryConfiguration.component, componentRegistryConfiguration.type);
 
-    this.manager.add(configuration);
+    const component = this.renderer.renderComponent(configuration.component, this.mainComponent.container);
 
-    console.log(this.manager.getAll());
-
-    this.renderer.renderComponent(configuration.component, this.mainComponent.container);
+    this.manager.add(component);
   }
 
 }
