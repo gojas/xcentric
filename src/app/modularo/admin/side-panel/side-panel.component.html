@@ -5,4 +5,11 @@
     type="button"
     label="{{componentRegistryConfiguration.name}}"
   ></button>
+
+  <div
+    appDraggable
+    context="shit"
+    (dragStarted)="onDragStarted($event)"
+    [content]="componentRegistryConfiguration"><h4>{{componentRegistryConfiguration.name}}</h4>
+  </div>
 </div>

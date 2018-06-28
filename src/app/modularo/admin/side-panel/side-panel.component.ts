@@ -1,7 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ComponentRegistry, ComponentRegistryConfiguration} from '../../service/component-registry';
 import {ComponentManagerService} from '../../service/component-manager.service';
-import {ComponentConfiguration} from '../../service/component-configuration';
 import {ComponentRendererService} from '../../service/renderer/component-renderer.service';
 import {ModuleComponent} from '../../module.component';
 
@@ -27,12 +26,8 @@ export class SidePanelComponent implements OnInit {
     this.componentRegistryConfigurations = this.componentRegistry.components;
   }
 
-  public onComponentRegistryConfigurationClick(event: any, componentRegistryConfiguration: ComponentRegistryConfiguration): void {
-    const configuration = new ComponentConfiguration('1', 'New One', componentRegistryConfiguration.component, componentRegistryConfiguration.type);
-
-    const component = this.renderer.renderComponent(configuration.component, this.mainComponent.container);
-
-    this.manager.add(component);
+  public onDragStarted($event): void {
+    this.mainComponent.isSidePanelVisible = false;
   }
 
 }

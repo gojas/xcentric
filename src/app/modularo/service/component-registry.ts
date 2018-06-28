@@ -4,33 +4,27 @@ import {PanelComponent} from '../component/panel/panel.component';
 import {ButtonComponent} from '../component/button/button.component';
 import {InputTextComponent} from '../component/input-text/input-text.component';
 
-export interface ComponentRegistryConfiguration {
+export class ComponentRegistryConfiguration {
   component: any;
   type: ComponentType;
   name: string;
+
+  public constructor(
+    component: any,
+    type: ComponentType,
+    name: string
+  ) {
+    this.component = component;
+    this.type = type;
+    this.name = name;
+  }
 }
 
 export class ComponentRegistry {
   public components: ComponentRegistryConfiguration[] = [
-    {
-      component: GridComponent,
-      type: ComponentType.Grid,
-      name: 'Grid'
-    },
-    {
-      component: PanelComponent,
-      type: ComponentType.Panel,
-      name: 'Panel'
-    },
-    {
-      component: ButtonComponent,
-      type: ComponentType.Button,
-      name: 'Button'
-    },
-    {
-      component: InputTextComponent,
-      type: ComponentType.Input,
-      name: 'Text'
-    }
+    new ComponentRegistryConfiguration(GridComponent, ComponentType.Grid, 'Grid'),
+    new ComponentRegistryConfiguration(PanelComponent, ComponentType.Panel, 'Panel'),
+    new ComponentRegistryConfiguration(ButtonComponent, ComponentType.Button, 'Button'),
+    new ComponentRegistryConfiguration(InputTextComponent, ComponentType.Input, 'Text')
   ];
 }

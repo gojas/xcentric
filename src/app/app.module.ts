@@ -12,7 +12,8 @@ import {GridComponent} from './modularo/component/grid/grid.component';
 import {PanelComponent} from './modularo/component/panel/panel.component';
 import {ButtonComponent} from './modularo/component/button/button.component';
 import {InputTextComponent} from './modularo/component/input-text/input-text.component';
-
+import {DraggableDirective} from './modularo/directive/drag/draggable';
+import {DraggableTargetDirective} from './modularo/directive/drag/draggable-target';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,10 @@ import {InputTextComponent} from './modularo/component/input-text/input-text.com
     GridComponent,
     PanelComponent,
     ButtonComponent,
-    InputTextComponent
+    InputTextComponent,
+
+    DraggableDirective,
+    DraggableTargetDirective
   ],
   imports: [
     BrowserModule,
@@ -41,7 +45,9 @@ import {InputTextComponent} from './modularo/component/input-text/input-text.com
     ButtonComponent,
     InputTextComponent
   ],
-  providers: [],
+  providers: [
+
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
