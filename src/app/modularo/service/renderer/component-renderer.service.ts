@@ -7,14 +7,13 @@ import {
   RendererFactory2
 } from '@angular/core';
 
-import {ModuleComponent} from '../../module.component';
+import {AbstractComponent} from '../../component/abstract.component';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ComponentRendererService {
 
-  private moduleComponent: ModuleComponent = null;
   private renderer: Renderer2;
 
   public constructor(
@@ -24,20 +23,19 @@ export class ComponentRendererService {
     this.renderer = rendererFactory.createRenderer(null, null);
   }
 
-  public renderComponent(component: any, renderTo: ViewContainerRef): any {
-    const componentRef = this.renderTo(component, renderTo),
-      componentInstance = componentRef.instance;
+  public renderComponent(component: any, renderTo: ViewContainerRef): AbstractComponent {
+    const componentRef = this.renderTo(component, renderTo);
 
-    return componentInstance;
+    return componentRef.instance;
   }
 
   public removeComponents(): ComponentRendererService {
-    this.getModuleComponent().container.clear();
+    // todo
     return this;
   }
 
-  public removeComponent(index: number): ComponentRendererService {
-    this.getModuleComponent().container.remove(index);
+  public removeComponent(component: AbstractComponent): ComponentRendererService {
+    // todo
 
     return this;
   }
@@ -45,14 +43,5 @@ export class ComponentRendererService {
   public renderTo(component, renderTo: ViewContainerRef): ComponentRef<any> {
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(component);
     return renderTo.createComponent(componentFactory);
-  }
-
-  public setModuleComponent(moduleComponent: ModuleComponent): ComponentRendererService {
-    this.moduleComponent = moduleComponent;
-    return this;
-  }
-
-  public getModuleComponent(): ModuleComponent {
-    return this.moduleComponent;
   }
 }

@@ -32,6 +32,11 @@ export class ComponentFacadeService {
     return this;
   }
 
+  public remove(component: AbstractComponent): ComponentFacadeService {
+    // this.manager.remove();
+    this.renderer.removeComponent(component);
+  }
+
   private createComponentConfiguration(registryConfiguration: ComponentRegistryConfiguration): ComponentConfiguration {
     return new ComponentConfiguration(
       '1',
