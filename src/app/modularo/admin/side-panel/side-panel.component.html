@@ -1,14 +1,7 @@
 <div *ngFor="let componentRegistryConfiguration of componentRegistryConfigurations">
-  <button
-    pButton
-    (click)="onComponentRegistryConfigurationClick($event, componentRegistryConfiguration)"
-    type="button"
-    label="{{componentRegistryConfiguration.name}}"
-  ></button>
-
   <div
     appDraggable
-    context="shit"
+    context="componentRegistryConfiguration"
     (dragStarted)="onDragStarted($event)"
     [content]="componentRegistryConfiguration"><h4>{{componentRegistryConfiguration.name}}</h4>
   </div>

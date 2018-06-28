@@ -1,9 +1,6 @@
-import { HostListener } from '@angular/core';
+import {Input} from '@angular/core';
+import {ComponentConfiguration} from '../service/component-configuration';
 
 export abstract class AbstractComponent {
-
-  @HostListener('click') onClick() {
-    console.log(this);
-  }
-
+  @Input() configuration: ComponentConfiguration = null;
 }

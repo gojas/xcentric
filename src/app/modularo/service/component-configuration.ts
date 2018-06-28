@@ -30,8 +30,18 @@ export class ComponentConfiguration implements Tree {
     return this.children;
   }
 
+  public addChild(child: ComponentConfiguration): this {
+    this.children.push(child);
+    return this;
+  }
+
   public getParent(): ComponentConfiguration {
     return this.parent;
+  }
+
+  public setParent(parent: ComponentConfiguration): this {
+    this.parent = parent;
+    return this;
   }
 
 }

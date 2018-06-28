@@ -1,1 +1,7 @@
-<div>PANEL HERE</div>
+<div
+  appDraggableTarget
+  (dropped)="onDrop($event)"
+  context="componentRegistryConfiguration"
+>
+  <ng-template #container></ng-template>
+</div>

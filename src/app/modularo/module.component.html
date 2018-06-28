@@ -1,5 +1,3 @@
-<h1>Modularo here</h1>
-
 <p-sidebar [(visible)]="isSidePanelVisible" position="right">
   <app-admin-side-panel [mainComponent]="this"></app-admin-side-panel>
 </p-sidebar>
@@ -8,9 +6,7 @@
 
 <button type="text" (click)="onChangeContext($event)" pButton icon="pi pi-plus" label="Set Admin Context"></button>
 
-<div appDraggable context="shit" [content]="'jaje'"><h4>JAJE</h4></div>
-
-<div appDraggableTarget (dropped)="onDrop($event)" context="shit" id="container">
+<div appDraggableTarget (dropped)="onDrop($event)" context="componentRegistryConfiguration" id="container">
   <ng-template #container></ng-template>
 </div>
 

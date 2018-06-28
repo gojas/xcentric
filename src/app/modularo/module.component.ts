@@ -5,6 +5,7 @@ import {ContextType} from './service/context/context-type';
 import {ComponentManagerService} from './service/component-manager.service';
 import {ComponentRegistryConfiguration} from './service/component-registry';
 import {ComponentConfiguration} from './service/component-configuration';
+import {AbstractComponent} from './component/abstract.component';
 
 @Component({
   selector: 'app-module',
@@ -13,7 +14,7 @@ import {ComponentConfiguration} from './service/component-configuration';
 })
 export class ModuleComponent implements OnInit {
 
-  public isSidePanelVisible: boolean = false;
+  public isSidePanelVisible = false;
 
   @ViewChild('container', {read: ViewContainerRef}) container: ViewContainerRef;
 
@@ -42,10 +43,14 @@ export class ModuleComponent implements OnInit {
     if (content instanceof ComponentRegistryConfiguration) {
       const configuration = new ComponentConfiguration('1', 'New One', content.component, content.type);
 
-      const component = this.renderer.renderComponent(configuration.component, this.container);
+      const component: AbstractComponent = this.renderer.renderComponent(configuration.component, this.container);
+
+      component.configuration = configuration;
 
       this.manager.add(component);
     }
+
+    this.isSidePanelVisible = true;
   }
 
 }
