@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AbstractComponent} from '../abstract.component';
+import {ContainerService} from '../../service/container.service';
 
 @Component({
   selector: 'app-component-grid',
@@ -7,6 +8,12 @@ import {AbstractComponent} from '../abstract.component';
   styleUrls: ['./grid.component.scss']
 })
 export class GridComponent extends AbstractComponent implements OnInit {
+
+  protected constructor(
+    protected serviceContainer: ContainerService
+  ) {
+    super(serviceContainer);
+  }
 
   public ngOnInit(): void {
   }

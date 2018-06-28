@@ -1,9 +1,6 @@
-import {Component, OnInit, ViewChild, ViewContainerRef} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AbstractComponent} from '../abstract.component';
-import {ComponentRegistryConfiguration} from '../../service/component-registry';
-import {ComponentConfiguration} from '../../service/component-configuration';
-import {ComponentRendererService} from '../../service/renderer/component-renderer.service';
-import {ComponentManagerService} from '../../service/component-manager.service';
+import {ContainerService} from '../../service/container.service';
 
 @Component({
   selector: 'app-component-panel',
@@ -12,30 +9,15 @@ import {ComponentManagerService} from '../../service/component-manager.service';
 })
 export class PanelComponent extends AbstractComponent implements OnInit {
 
-  @ViewChild('container', {read: ViewContainerRef}) container: ViewContainerRef;
-
-  public constructor(
-    private renderer: ComponentRendererService,
-    private manager: ComponentManagerService
+  protected constructor(
+    protected serviceContainer: ContainerService
   ) {
-    super();
+    super(serviceContainer);
   }
 
   public ngOnInit(): void {
   }
 
-  public onDrop(content: any): void {
-    if (content instanceof ComponentRegistryConfiguration) {
-      const configuration = new ComponentConfiguration('1', 'New One', content.component, content.type);
 
-      this.configuration.addChild(configuration);
-      configuration.setParent(this.configuration);
-
-      const component: AbstractComponent = this.renderer.renderComponent(configuration.component, this.container);
-      component.configuration = configuration;
-    }
-
-    console.log(this.manager);
-  }
 
 }

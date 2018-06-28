@@ -1,5 +1,11 @@
-<button
-  pButton
-  type="button"
-  label="Click"
-></button>
+<div
+  appDraggableTarget
+  (dropped)="onDrop($event)"
+  context="componentRegistryConfiguration"
+>
+  <button
+    pButton
+    type="button"
+    label="Click"
+  ></button>
+</div>

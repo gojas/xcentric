@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AbstractComponent} from '../abstract.component';
+import {ContainerService} from '../../service/container.service';
 
 @Component({
   selector: 'app-component-button',
@@ -8,7 +9,17 @@ import {AbstractComponent} from '../abstract.component';
 })
 export class ButtonComponent extends AbstractComponent implements OnInit {
 
+  protected constructor(
+    protected serviceContainer: ContainerService
+  ) {
+    super(serviceContainer);
+  }
+
   public ngOnInit(): void {
+  }
+
+  public onDrop(content: any): void {
+    console.error('Cannot drop component to ' + this.constructor.name);
   }
 
 }

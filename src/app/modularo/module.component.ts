@@ -4,8 +4,7 @@ import {ContextService} from './service/context/context.service';
 import {ContextType} from './service/context/context-type';
 import {ComponentManagerService} from './service/component-manager.service';
 import {ComponentRegistryConfiguration} from './service/component-registry';
-import {ComponentConfiguration} from './service/component-configuration';
-import {AbstractComponent} from './component/abstract.component';
+import {ComponentFacadeService} from './service/component/component-facade.service';
 
 @Component({
   selector: 'app-module',
@@ -21,7 +20,8 @@ export class ModuleComponent implements OnInit {
   public constructor(
     private renderer: ComponentRendererService,
     private context: ContextService,
-    private manager: ComponentManagerService
+    private manager: ComponentManagerService,
+    private facade: ComponentFacadeService
   ) { }
 
   public ngOnInit(): void {
@@ -41,13 +41,10 @@ export class ModuleComponent implements OnInit {
   public onDrop(content: any): void {
 
     if (content instanceof ComponentRegistryConfiguration) {
-      const configuration = new ComponentConfiguration('1', 'New One', content.component, content.type);
-
-      const component: AbstractComponent = this.renderer.renderComponent(configuration.component, this.container);
-
-      component.configuration = configuration;
-
-      this.manager.add(component);
+      this.facade.create(
+        content,
+        this.container
+      );
     }
 
     this.isSidePanelVisible = true;
