@@ -2,6 +2,7 @@ import {ViewChild, ViewContainerRef, HostListener} from '@angular/core';
 import {ComponentConfiguration} from '../service/component-configuration';
 import {ComponentRegistryConfiguration} from '../service/component-registry';
 import {ContainerService} from '../service/container.service';
+import {ContextType} from '../service/context/context-type';
 
 export interface Tree {
   getChildren(): AbstractComponent[];
@@ -18,10 +19,13 @@ export abstract class AbstractComponent implements Tree {
   @ViewChild('container', {read: ViewContainerRef}) container: ViewContainerRef;
 
   @HostListener('mousedown') onClick() {
-    console.log(this);
+    if ( this.serviceContainer.context.getContext() === ContextType.Admin ) {
+      // show edit panel based on ComponentConfiguration
+      console.log(this);
+    }
   }
 
-  protected constructor(
+  public constructor(
     protected serviceContainer: ContainerService
   ) {
 

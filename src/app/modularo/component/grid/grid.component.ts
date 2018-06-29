@@ -9,7 +9,7 @@ import {ContainerService} from '../../service/container.service';
 })
 export class GridComponent extends AbstractComponent implements OnInit {
 
-  protected constructor(
+  public constructor(
     protected serviceContainer: ContainerService
   ) {
     super(serviceContainer);

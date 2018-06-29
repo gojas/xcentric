@@ -4,7 +4,11 @@
 }
 
 div {
+  margin: 0;
+  padding: 0;
   width: 400px;
   height: 400px;
   background: blue;
+  resize: both;
+  overflow: auto;
 }

@@ -13,6 +13,11 @@ export class ComponentManagerService {
     return this;
   }
 
+  public remove(component: AbstractComponent): this {
+
+    return this;
+  }
+
   public getAll(): AbstractComponent[] {
     return this.collection;
   }

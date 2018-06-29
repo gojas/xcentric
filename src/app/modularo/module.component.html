@@ -5,6 +5,7 @@
 <button type="text" (click)="isSidePanelVisible = true" pButton icon="pi pi-plus" label="Show"></button>
 
 <button type="text" (click)="onChangeContext($event)" pButton icon="pi pi-plus" label="Set Admin Context"></button>
+<h2>{{context.getContext()}}</h2>
 
 <div appDraggableTarget (dropped)="onDrop($event)" context="componentRegistryConfiguration" id="container">
   <ng-template #container></ng-template>
