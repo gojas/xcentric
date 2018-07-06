@@ -1,4 +1,5 @@
-import { EntityManagerService } from './entity-manager.service';
+import {Injectable} from '@angular/core';
+import {EntityMetaHandler} from '../decorator/entity-meta-handler';
 
 export enum State {
     Create = 1,
@@ -6,30 +7,34 @@ export enum State {
     Delete = 3
 }
 
-export class EntityManagerState {
+@Injectable()
+export class EntityManagerStateService {
+
+    private metaHandler: EntityMetaHandler = new EntityMetaHandler();
 
     public entities = {};
 
     public constructor(
-        private entityManager: EntityManagerService
     ) {
         this.init();
     }
 
     public getEntities(state: State): Object[] {
-        const persisted = this.entities[state],
+        const persisted = this.entities[state] || [],
             entities = [];
 
         for (const apiRoute in persisted) {
+          if (persisted[apiRoute]) {
             for (const entity of persisted[apiRoute]) {
-                entities.push(entity);
+              entities.push(entity);
             }
+          }
         }
 
         return entities;
     }
 
-    public persist(entity: Object): EntityManagerState {
+    public persist(entity: Object): EntityManagerStateService {
         const state = entity['id'] ? State.Update : State.Create;
 
         this.prepare(state, entity)
@@ -38,16 +43,9 @@ export class EntityManagerState {
         return this;
     }
 
-    public remove(entity: Object): EntityManagerState {
+    public remove(entity: Object): EntityManagerStateService {
         this.prepare(State.Delete, entity)
             .addOrReplace(State.Delete, entity);
-
-        return this;
-    }
-
-    public flush(): EntityManagerState {
-
-
 
         return this;
     }
@@ -58,16 +56,16 @@ export class EntityManagerState {
         this.entities[State.Delete] = {};
     }
 
-    private prepare(state: State, entity: Object): EntityManagerState {
-        const apiRoute = this.entityManager.getRoute(entity);
+    private prepare(state: State, entity: Object): EntityManagerStateService {
+        const apiRoute = this.metaHandler.getRoute(entity);
 
         this.entities[state][apiRoute] = this.entities[state][apiRoute] || [];
 
         return this;
     }
 
-    private addOrReplace(state: State, entity: Object): EntityManagerState {
-        const apiRoute = this.entityManager.getRoute(entity);
+    private addOrReplace(state: State, entity: Object): EntityManagerStateService {
+        const apiRoute = this.metaHandler.getRoute(entity);
 
         if (this.exists(state, apiRoute, entity)) {
             this.replace(state, apiRoute, entity);
@@ -78,13 +76,13 @@ export class EntityManagerState {
         return this;
     }
 
-    private add(state: State, apiRoute: string, entity: Object): EntityManagerState {
+    private add(state: State, apiRoute: string, entity: Object): EntityManagerStateService {
         this.entities[state][apiRoute].push(entity);
 
         return this;
     }
 
-    private replace(state: State, apiRoute: string, entity: Object): EntityManagerState {
+    private replace(state: State, apiRoute: string, entity: Object): EntityManagerStateService {
 
         return this;
     }

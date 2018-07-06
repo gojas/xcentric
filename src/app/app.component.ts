@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {EntityManagerService} from 'xcentric';
+import {User} from './entity-manager/user';
 
 @Component({
   selector: 'app-root',
@@ -13,5 +14,14 @@ export class AppComponent {
     private em: EntityManagerService
   ) {
     console.log(em);
+
+    const user = new User().setName('One').setId(1);
+    const user2 = new User().setName('Two');
+
+    this.em.persist(user);
+    this.em.persist(user2);
+
+    this.em.flush()
+        .subscribe();
   }
 }

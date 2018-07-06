@@ -1,4 +1,5 @@
 import { MetaPropertyNotDefined } from './error/meta-property-not-defined.error';
+import {EntityApiRouteNotFoundError} from '../error/entity-api-route-not-found.error';
 
 export class EntityMetaHandler {
 
@@ -9,6 +10,15 @@ export class EntityMetaHandler {
   public static META_ASSOCIATIONS_MANY = 'associationsMany';
   public static META_CONVERTES = 'converters';
   public static META_DATE = 'DateConversion';
+
+  public getRoute(instance: Object): string {
+
+    if (!this.hasMetaProperty(instance, EntityMetaHandler.META_ROUTE)) {
+      throw new EntityApiRouteNotFoundError(instance);
+    }
+
+    return this.getMetaProperty(instance, EntityMetaHandler.META_ROUTE);
+  }
 
   public getAssociation(instance: Object, propertyKey: string): typeof Object {
     return instance.constructor[EntityMetaHandler.META][EntityMetaHandler.META_ASSOCIATIONS][propertyKey];
