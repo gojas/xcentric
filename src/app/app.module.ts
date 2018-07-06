@@ -3,7 +3,6 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {NgModule} from '@angular/core';
 
 import {AppComponent} from './app.component';
-import {XcentricModule} from 'xcentric';
 import {ModuleComponent} from './modularo/module.component';
 import {SidebarModule} from 'primeng/sidebar';
 import {ButtonModule} from 'primeng/button';
@@ -15,6 +14,7 @@ import {ButtonComponent} from './modularo/component/button/button.component';
 import {InputTextComponent} from './modularo/component/input-text/input-text.component';
 import {DraggableDirective} from './modularo/directive/drag/draggable';
 import {DraggableTargetDirective} from './modularo/directive/drag/draggable-target';
+import {XcentricEntityManagerModule} from 'xcentric';
 
 @NgModule({
   declarations: [
@@ -36,7 +36,7 @@ import {DraggableTargetDirective} from './modularo/directive/drag/draggable-targ
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    XcentricModule,
+    XcentricEntityManagerModule,
     SidebarModule,
     ButtonModule,
     InputTextModule

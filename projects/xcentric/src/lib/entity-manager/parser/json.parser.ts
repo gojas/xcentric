@@ -1,9 +1,8 @@
-import { Entity } from '../service/entity';
 import { AbstractParser } from './abstract-parser';
 
 export class JsonParser extends AbstractParser {
 
-  public parseEntity(instance: Entity, data: any): Entity {
+  public parseEntity(instance: Object, data: any): Object {
     const parsed = Object.assign(instance, data);
 
     if (parsed._embedded && parsed._embedded instanceof Object) {

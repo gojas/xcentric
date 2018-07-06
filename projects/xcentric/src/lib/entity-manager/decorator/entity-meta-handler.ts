@@ -1,4 +1,3 @@
-import { Entity } from '../service/entity';
 import { MetaPropertyNotDefined } from './error/meta-property-not-defined.error';
 
 export class EntityMetaHandler {
@@ -11,15 +10,15 @@ export class EntityMetaHandler {
   public static META_CONVERTES = 'converters';
   public static META_DATE = 'DateConversion';
 
-  public getAssociation(instance: Entity, propertyKey: string): typeof Entity {
+  public getAssociation(instance: Object, propertyKey: string): typeof Object {
     return instance.constructor[EntityMetaHandler.META][EntityMetaHandler.META_ASSOCIATIONS][propertyKey];
   }
 
-  public getAssociationMany(instance: Entity, propertyKey: string): typeof Entity {
+  public getAssociationMany(instance: Object, propertyKey: string): typeof Object {
     return instance.constructor[EntityMetaHandler.META][EntityMetaHandler.META_ASSOCIATIONS_MANY][propertyKey];
   }
 
-  public hasAssociation(instance: Entity, propertyKey: string) {
+  public hasAssociation(instance: Object, propertyKey: string) {
 
     if (!this.hasMetaProperty(instance, EntityMetaHandler.META_ASSOCIATIONS)) {
       return false;
@@ -28,7 +27,7 @@ export class EntityMetaHandler {
     return instance.constructor[EntityMetaHandler.META][EntityMetaHandler.META_ASSOCIATIONS][propertyKey];
   }
 
-  public hasAssociationMany(instance: Entity, propertyKey: string) {
+  public hasAssociationMany(instance: Object, propertyKey: string) {
 
     if (!this.hasMetaProperty(instance, EntityMetaHandler.META_ASSOCIATIONS_MANY)) {
       return false;
@@ -37,7 +36,7 @@ export class EntityMetaHandler {
     return instance.constructor[EntityMetaHandler.META][EntityMetaHandler.META_ASSOCIATIONS_MANY][propertyKey];
   }
 
-  public hasDate(instance: Entity, propertyKey: string) {
+  public hasDate(instance: Object, propertyKey: string) {
 
     if (!this.hasMetaProperty(instance, EntityMetaHandler.META_CONVERTES)) {
       return false;
@@ -54,7 +53,7 @@ export class EntityMetaHandler {
     return false;
   }
 
-  public hasMetaProperty(instance: Entity, metaProperty: string): boolean {
+  public hasMetaProperty(instance: Object, metaProperty: string): boolean {
 
     if (!this.hasMeta(instance)) {
       return false;
@@ -63,7 +62,7 @@ export class EntityMetaHandler {
     return this.isValueNotEmpty(instance.constructor[EntityMetaHandler.META][metaProperty]);
   }
 
-  public getMetaProperty(instance: Entity, metaProperty: string): any {
+  public getMetaProperty(instance: Object, metaProperty: string): any {
 
     if (!this.hasMetaProperty(instance, metaProperty)) {
       throw new MetaPropertyNotDefined(instance, metaProperty);
@@ -72,7 +71,7 @@ export class EntityMetaHandler {
     return instance.constructor[EntityMetaHandler.META][metaProperty];
   }
 
-  private hasMeta(instance: Entity): boolean {
+  private hasMeta(instance: Object): boolean {
     return instance.constructor[EntityMetaHandler.META];
   }
 

@@ -1,4 +1,3 @@
-import { Entity } from '../service/entity';
 import { Parser } from './parser';
 import { EntityMetaHandler } from '../decorator/entity-meta-handler';
 import { EntityMethodRequiredForProperty } from '../error/entity-method-for-property-required.error';
@@ -11,9 +10,9 @@ export abstract class AbstractParser implements Parser {
 
   protected metaHandler: EntityMetaHandler = new EntityMetaHandler();
 
-  public abstract parseEntity(instance: Entity, data: any);
+  public abstract parseEntity(instance: Object, data: any);
 
-  public parse(instance: Entity, data: any): Entity {
+  public parse(instance: Object, data: any): Object {
     const parsed = this.parseEntity(instance, data);
 
     for (const propertyName of this.getPropertyNames(instance)) {
@@ -34,7 +33,7 @@ export abstract class AbstractParser implements Parser {
     return parsed;
   }
 
-  public reParseDate(instance: Entity, propertyName: string) {
+  public reParseDate(instance: Object, propertyName: string) {
     const setterMethodName = this.getSetterMethodName(propertyName),
       getterMethodName = this.getGetterMethodName(propertyName);
 
@@ -43,7 +42,7 @@ export abstract class AbstractParser implements Parser {
     instance[setterMethodName](new Date(instance[getterMethodName]()));
   }
 
-  public parseArray(associationClass: typeof Entity, data: any[]): Entity[] {
+  public parseArray(associationClass: typeof Object, data: any[]): Object[] {
     const parsed = [];
 
     for (const entity of data) {
@@ -53,7 +52,7 @@ export abstract class AbstractParser implements Parser {
     return parsed;
   }
 
-  protected createAssociation(instance: Entity, propertyName: string) {
+  protected createAssociation(instance: Object, propertyName: string) {
     const setterMethodName = this.getSetterMethodName(propertyName),
       getterMethodName = this.getGetterMethodName(propertyName);
 
@@ -64,7 +63,7 @@ export abstract class AbstractParser implements Parser {
     instance[setterMethodName](this.parse(this.getInstance(associationClass), instance[getterMethodName]()));
   }
 
-  protected createAssociationMany(instance: Entity, propertyName: string) {
+  protected createAssociationMany(instance: Object, propertyName: string) {
     const setterMethodName = this.getSetterMethodName(propertyName),
       getterMethodName = this.getGetterMethodName(propertyName);
 
@@ -93,15 +92,15 @@ export abstract class AbstractParser implements Parser {
     return `${AbstractParser.GETTER_METHOD_PREFIX}${propertyName}`;
   }
 
-  protected getPropertyNames(instance: Entity): string[] {
+  protected getPropertyNames(instance: Object): string[] {
     return Object.getOwnPropertyNames(instance);
   }
 
-  protected getInstance(toCreate: typeof Entity): Entity {
+  protected getInstance(toCreate: typeof Object): Object {
     return new toCreate();
   }
 
-  private validatePropertyNameMethods(instance: Entity, propertyName: string): void {
+  private validatePropertyNameMethods(instance: Object, propertyName: string): void {
     const setterMethodName = this.getSetterMethodName(propertyName),
       getterMethodName = this.getGetterMethodName(propertyName);
 

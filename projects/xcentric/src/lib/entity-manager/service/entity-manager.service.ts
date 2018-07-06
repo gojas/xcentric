@@ -11,7 +11,6 @@ import { map } from 'rxjs/operators';
 
 const environment = null;
 
-import {Entity} from './entity';
 import {Parser} from '../parser/parser';
 import {JsonParser} from '../parser/json.parser';
 import {EntityApiRouteNotFoundError} from '../error/entity-api-route-not-found.error';
@@ -34,13 +33,13 @@ export class EntityManagerService {
   public constructor(private adapter: HttpClient) {
   }
 
-  public persist(entity: Entity): EntityManagerService {
+  public persist(entity: Object): EntityManagerService {
     this.state.persist(entity);
 
     return this;
   }
 
-  public remove(entity: Entity): EntityManagerService {
+  public remove(entity: Object): EntityManagerService {
     this.state.remove(entity);
 
     return this;
@@ -73,7 +72,7 @@ export class EntityManagerService {
     });
   }
 
-  public findOne(type: typeof Entity, id: number, params: HttpParams = new HttpParams()): Observable<Entity> {
+  public findOne(type: typeof Object, id: number, params: HttpParams = new HttpParams()): Observable<Object> {
     id = +id;
     if (!id) {
       throw new IdParameterMissing();
@@ -90,7 +89,7 @@ export class EntityManagerService {
       }));
   }
 
-  public findBy(type: typeof Entity, params: HttpParams = new HttpParams()): Observable<Entity[]> {
+  public findBy(type: typeof Object, params: HttpParams = new HttpParams()): Observable<Object[]> {
 
     const apiRoute = this.getRoute(new type());
 
@@ -111,7 +110,7 @@ export class EntityManagerService {
       }));
   }
 
-  public findPaginatedBy(type: typeof Entity, params: HttpParams = new HttpParams()): Observable<Paginated> {
+  public findPaginatedBy(type: typeof Object, params: HttpParams = new HttpParams()): Observable<Paginated> {
 
     const apiRoute = this.getRoute(new type());
 
@@ -134,7 +133,7 @@ export class EntityManagerService {
       }));
   }
 
-  public create(toCreateEntity: Entity, params: HttpParams = new HttpParams()): Observable<Entity> {
+  public create(toCreateEntity: Object, params: HttpParams = new HttpParams()): Observable<Object> {
 
     const apiRoute = this.getRoute(toCreateEntity);
 
@@ -149,7 +148,7 @@ export class EntityManagerService {
       }));
   }
 
-  public update(toUpdateEntity: Entity, params: HttpParams = new HttpParams()): Observable<Entity> {
+  public update(toUpdateEntity: Object, params: HttpParams = new HttpParams()): Observable<Object> {
     const id = +toUpdateEntity['id'],
       apiRoute = this.getRoute(toUpdateEntity);
 
@@ -168,7 +167,7 @@ export class EntityManagerService {
       }));
   }
 
-  public delete(toDeleteEntity: Entity, params: HttpParams = new HttpParams()): Observable<any> {
+  public delete(toDeleteEntity: Object, params: HttpParams = new HttpParams()): Observable<any> {
 
     const apiRoute = this.getRoute(toDeleteEntity);
 
@@ -207,7 +206,7 @@ export class EntityManagerService {
     });
   }
 
-  public getRoute(instance: Entity): string {
+  public getRoute(instance: Object): string {
 
     if (!this.metaHandler.hasMetaProperty(instance, EntityMetaHandler.META_ROUTE)) {
       throw new EntityApiRouteNotFoundError(instance);

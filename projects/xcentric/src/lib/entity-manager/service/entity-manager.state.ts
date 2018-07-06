@@ -1,5 +1,4 @@
 import { EntityManagerService } from './entity-manager.service';
-import { Entity } from './entity';
 
 export enum State {
     Create = 1,
@@ -17,7 +16,7 @@ export class EntityManagerState {
         this.init();
     }
 
-    public getEntities(state: State): Entity[] {
+    public getEntities(state: State): Object[] {
         const persisted = this.entities[state],
             entities = [];
 
@@ -30,7 +29,7 @@ export class EntityManagerState {
         return entities;
     }
 
-    public persist(entity: Entity): EntityManagerState {
+    public persist(entity: Object): EntityManagerState {
         const state = entity['id'] ? State.Update : State.Create;
 
         this.prepare(state, entity)
@@ -39,7 +38,7 @@ export class EntityManagerState {
         return this;
     }
 
-    public remove(entity: Entity): EntityManagerState {
+    public remove(entity: Object): EntityManagerState {
         this.prepare(State.Delete, entity)
             .addOrReplace(State.Delete, entity);
 
@@ -59,7 +58,7 @@ export class EntityManagerState {
         this.entities[State.Delete] = {};
     }
 
-    private prepare(state: State, entity: Entity): EntityManagerState {
+    private prepare(state: State, entity: Object): EntityManagerState {
         const apiRoute = this.entityManager.getRoute(entity);
 
         this.entities[state][apiRoute] = this.entities[state][apiRoute] || [];
@@ -67,7 +66,7 @@ export class EntityManagerState {
         return this;
     }
 
-    private addOrReplace(state: State, entity: Entity): EntityManagerState {
+    private addOrReplace(state: State, entity: Object): EntityManagerState {
         const apiRoute = this.entityManager.getRoute(entity);
 
         if (this.exists(state, apiRoute, entity)) {
@@ -79,18 +78,18 @@ export class EntityManagerState {
         return this;
     }
 
-    private add(state: State, apiRoute: string, entity: Entity): EntityManagerState {
+    private add(state: State, apiRoute: string, entity: Object): EntityManagerState {
         this.entities[state][apiRoute].push(entity);
 
         return this;
     }
 
-    private replace(state: State, apiRoute: string, entity: Entity): EntityManagerState {
+    private replace(state: State, apiRoute: string, entity: Object): EntityManagerState {
 
         return this;
     }
 
-    private exists(state: State, apiRoute: string, entity: Entity): boolean {
+    private exists(state: State, apiRoute: string, entity: Object): boolean {
         const index = this.entities[state][apiRoute].findIndex(commitedEntity => commitedEntity['id'] === entity['id']);
 
         return index !== -1;
