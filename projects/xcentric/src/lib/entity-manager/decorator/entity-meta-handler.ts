@@ -4,6 +4,7 @@ import {EntityApiRouteNotFoundError} from '../error/entity-api-route-not-found.e
 export class EntityMetaHandler {
 
   public static META = 'meta';
+  public static META_UNIQUE_ID = 'uniqueId';
   public static META_VALIDATORS = 'validators';
   public static META_ROUTE = 'route';
   public static META_ASSOCIATIONS = 'associations';
@@ -64,6 +65,7 @@ export class EntityMetaHandler {
   }
 
   public hasMetaProperty(instance: Object, metaProperty: string): boolean {
+    instance.constructor[EntityMetaHandler.META] = instance.constructor[EntityMetaHandler.META] || {};
 
     if (!this.hasMeta(instance)) {
       return false;
@@ -79,6 +81,14 @@ export class EntityMetaHandler {
     }
 
     return instance.constructor[EntityMetaHandler.META][metaProperty];
+  }
+
+  public setMetaProperty(instance: Object, metaProperty: string, value: any): this {
+    instance.constructor[EntityMetaHandler.META] = instance.constructor[EntityMetaHandler.META] || {};
+
+    instance.constructor[EntityMetaHandler.META][metaProperty] = value;
+
+    return this;
   }
 
   private hasMeta(instance: Object): boolean {

@@ -13,12 +13,13 @@ export class AppComponent {
   public constructor(
     private em: EntityManagerService
   ) {
-    console.log(em);
 
     const user = new User().setName('One').setId(1);
-    const user2 = new User().setName('Two');
-
     this.em.persist(user);
+    user.setName('CHANGED');
+    this.em.persist(user);
+
+    const user2 = new User().setName('Two');
     this.em.persist(user2);
 
     this.em.flush()

@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {EntityMetaHandler} from '../decorator/entity-meta-handler';
+import {Guid} from '../helper/guid';
 
 export enum State {
     Create = 1,
@@ -65,40 +66,59 @@ export class EntityManagerStateService {
     }
 
     private prepare(state: State, entity: Object): EntityManagerStateService {
-        const apiRoute = this.metaHandler.getRoute(entity);
-
-        this.entities[state][apiRoute] = this.entities[state][apiRoute] || [];
+        this.entities[state][entity.constructor.name] = this.entities[state][entity.constructor.name] || [];
 
         return this;
     }
 
     private addOrReplace(state: State, entity: Object): EntityManagerStateService {
-        const apiRoute = this.metaHandler.getRoute(entity);
-
-        if (this.exists(state, apiRoute, entity)) {
-            this.replace(state, apiRoute, entity);
+        if (this.exists(state, entity)) {
+            this.replace(state, entity);
         } else {
-            this.add(state, apiRoute, entity);
+            this.add(state,  entity);
         }
 
         return this;
     }
 
-    private add(state: State, apiRoute: string, entity: Object): EntityManagerStateService {
-        this.entities[state][apiRoute].push(entity);
+    private add(state: State, entity: Object): EntityManagerStateService {
+        this.metaHandler.setMetaProperty(entity, EntityMetaHandler.META_UNIQUE_ID, Guid.guid());
+
+        this.entities[state][entity.constructor.name].push(entity);
 
         return this;
     }
 
-    private replace(state: State, apiRoute: string, entity: Object): EntityManagerStateService {
+    private replace(state: State, entity: Object): EntityManagerStateService {
+        const entities = this.entities[state][entity.constructor.name] || [];
+
+        let stateEntity = this.find(state, entity);
+
+        stateEntity = entity;
 
         return this;
     }
 
-    private exists(state: State, apiRoute: string, entity: Object): boolean {
-        const index = this.entities[state][apiRoute].findIndex(commitedEntity => commitedEntity['id'] === entity['id']);
+    private exists(state: State, entity: Object): boolean {
+        return this.find(state, entity) !== null;
+    }
 
-        return index !== -1;
+    private find(state: State, entity: Object): Object|null {
+      const entities = this.entities[state][entity.constructor.name] || [];
+
+      let foundEntity = null;
+
+      for (const stateEntity of entities) {
+        if (this.metaHandler.hasMetaProperty(stateEntity, EntityMetaHandler.META_UNIQUE_ID) &&
+          this.metaHandler.hasMetaProperty(entity, EntityMetaHandler.META_UNIQUE_ID) &&
+          this.metaHandler.getMetaProperty(stateEntity, EntityMetaHandler.META_UNIQUE_ID) ===
+          this.metaHandler.getMetaProperty(entity, EntityMetaHandler.META_UNIQUE_ID)
+        ) {
+          foundEntity = stateEntity;
+        }
+      }
+
+      return foundEntity;
     }
 
     private init(): void {
