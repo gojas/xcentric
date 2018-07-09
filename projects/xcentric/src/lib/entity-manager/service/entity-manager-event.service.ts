@@ -1,44 +1,47 @@
-import {Injectable} from '@angular/core';
+import {Injectable, Injector} from '@angular/core';
 import {configuration, EntityManagerModuleConfiguration} from '../xcentric.entity-manager.module';
 
 export enum EventType {
-  PreCreate = 1,
-  PreUpdate = 2,
-  PreRemove = 3,
-  PrePersist = 4
+  PrePost = 1,
+  PrePut = 2,
+  PreDelete = 3,
+
+  PreRemove = 4,
+  PrePersist = 5
 }
 
 @Injectable()
 export class EntityManagerEventService {
 
-  private eventMapping = {};
-
   configuration: EntityManagerModuleConfiguration;
 
-  public constructor() {
+  private eventMapping: Object = {};
+
+  public constructor(
+    private injector: Injector
+  ) {
     this.configuration = configuration;
     this.createMapping();
   }
 
-  public runEvent(entity: Object, eventType: EventType) {
-    const types = this.configuration[this.eventMapping[eventType]];
+  public run(entity: Object, eventType: EventType) {
+    const listenersTypes = this.configuration.listeners || [];
 
-    if (typeof types !== 'undefined') {
-      for (const type of types) {
-        const preUpdateListener = new type();
+    for (const listenerType of listenersTypes) {
+      const listener = this.injector.get(listenerType);
 
-        const methodName = this.createEventMethodName(eventType);
+      const methodName = this.createEventMethodName(eventType);
 
-        if (typeof preUpdateListener[methodName] === 'function') {
-          preUpdateListener[methodName](entity);
-        }
+      if (typeof listener[methodName] === 'function') {
+        listener[methodName](entity);
       }
     }
   }
 
   private createMapping(): void {
-    this.eventMapping[EventType.PreUpdate] = 'preUpdate';
-    this.eventMapping[EventType.PreCreate] = 'preCreate';
+    this.eventMapping[EventType.PrePost] = 'prePost';
+    this.eventMapping[EventType.PrePut] = 'prePut';
+    this.eventMapping[EventType.PreDelete] = 'preDelete';
     this.eventMapping[EventType.PreRemove] = 'preRemove';
     this.eventMapping[EventType.PrePersist] = 'prePersist';
   }

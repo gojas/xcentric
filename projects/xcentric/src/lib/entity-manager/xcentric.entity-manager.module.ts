@@ -4,10 +4,12 @@ import {HttpClientModule} from '@angular/common/http';
 import {EntityManagerEventService} from './service/entity-manager-event.service';
 import {UnitOfWorkService} from './service/unit-of-work.service';
 import {EntityManagerStateService} from './service/entity-manager-state.service';
+import {EntityManagerModifierService} from './service/entity-manager-modifier.service';
 
 export interface EntityManagerModuleConfiguration {
   urlPrefix: string;
-  preUpdate?: any[];
+  listeners?: any[];
+  modifiers?: any[];
 }
 
 export let configuration;
@@ -19,6 +21,7 @@ export let configuration;
   providers: [
     EntityManagerService,
     EntityManagerEventService,
+    EntityManagerModifierService,
     EntityManagerStateService,
     UnitOfWorkService
   ],
@@ -31,9 +34,19 @@ export class XcentricEntityManagerModule {
 
     configuration = entityManagerModuleConfiguration;
 
+    const providers = [];
+
+    for (const listener of configuration.listeners) {
+      providers.push(listener);
+    }
+
+    for (const modifier of configuration.modifiers) {
+      providers.push(modifier);
+    }
+
     return {
       ngModule: XcentricEntityManagerModule,
-      providers: []
+      providers: providers
     };
   }
 

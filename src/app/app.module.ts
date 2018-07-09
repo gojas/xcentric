@@ -15,7 +15,8 @@ import {InputTextComponent} from './modularo/component/input-text/input-text.com
 import {DraggableDirective} from './modularo/directive/drag/draggable';
 import {DraggableTargetDirective} from './modularo/directive/drag/draggable-target';
 import {XcentricEntityManagerModule} from 'xcentric';
-import {PreUserUpdateListener} from './entity-manager/pre-user-update.listener';
+import {UserListener} from './entity-manager/user.listener';
+import {UserModifier} from './entity-manager/user.modifier';
 
 @NgModule({
   declarations: [
@@ -39,8 +40,11 @@ import {PreUserUpdateListener} from './entity-manager/pre-user-update.listener';
     BrowserAnimationsModule,
     XcentricEntityManagerModule.forRoot({
       urlPrefix: 'yo/',
-      preUpdate: [
-        PreUserUpdateListener
+      listeners: [
+        UserListener
+      ],
+      modifiers: [
+        UserModifier
       ]
     }),
     SidebarModule,

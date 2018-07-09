@@ -19,6 +19,14 @@ export class EntityManagerStateService {
         this.init();
     }
 
+    public getAll(): Object[] {
+      return [].concat(
+        this.getEntities(State.Create),
+        this.getEntities(State.Update),
+        this.getEntities(State.Delete)
+      );
+    }
+
     public getEntities(state: State): Object[] {
         const persisted = this.entities[state] || [],
             entities = [];
