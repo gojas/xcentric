@@ -1,14 +1,14 @@
 import { Parser } from './parser';
-import { EntityMetaHandler } from '../decorator/entity-meta-handler';
 import { EntityMethodRequiredForProperty } from '../error/entity-method-for-property-required.error';
 import { EntityPropertyNotArrayButSetAsAssociationMany } from '../error/entity-property-not-array-but-set-as-association-many.error';
+import {EntityManagerMetaDataService} from '../service/meta/entity-manager-meta-data.service';
 
 export abstract class AbstractParser implements Parser {
 
   private static readonly SETTER_METHOD_PREFIX = 'set';
   private static readonly GETTER_METHOD_PREFIX = 'get';
 
-  protected metaHandler: EntityMetaHandler = new EntityMetaHandler();
+  protected meta: EntityManagerMetaDataService = new EntityManagerMetaDataService();
 
   public abstract parseEntity(instance: Object, data: any);
 
@@ -17,29 +17,16 @@ export abstract class AbstractParser implements Parser {
 
     for (const propertyName of this.getPropertyNames(instance)) {
 
-      if (this.metaHandler.hasAssociation(instance, propertyName)) {
+      if (this.meta.hasAssociation(instance, propertyName)) {
         this.createAssociation(instance, propertyName);
       }
 
-      if (this.metaHandler.hasAssociationMany(instance, propertyName)) {
+      if (this.meta.hasAssociationMany(instance, propertyName)) {
         this.createAssociationMany(instance, propertyName);
-      }
-
-      if (this.metaHandler.hasDate(instance, propertyName)) {
-        this.reParseDate(instance, propertyName);
       }
     }
 
     return parsed;
-  }
-
-  public reParseDate(instance: Object, propertyName: string) {
-    const setterMethodName = this.getSetterMethodName(propertyName),
-      getterMethodName = this.getGetterMethodName(propertyName);
-
-    this.validatePropertyNameMethods(instance, propertyName);
-
-    instance[setterMethodName](new Date(instance[getterMethodName]()));
   }
 
   public parseArray(associationClass: typeof Object, data: any[]): Object[] {
@@ -58,7 +45,7 @@ export abstract class AbstractParser implements Parser {
 
     this.validatePropertyNameMethods(instance, propertyName);
 
-    const associationClass = this.metaHandler.getAssociation(instance, propertyName);
+    const associationClass = this.meta.getAssociation(instance, propertyName);
 
     instance[setterMethodName](this.parse(this.getInstance(associationClass), instance[getterMethodName]()));
   }
@@ -69,14 +56,12 @@ export abstract class AbstractParser implements Parser {
 
     this.validatePropertyNameMethods(instance, propertyName);
 
-    const associationClass = this.metaHandler.getAssociationMany(instance, propertyName);
+    const associationClass = this.meta.getAssociationMany(instance, propertyName);
 
     if (!(instance[getterMethodName]() instanceof Array)) {
       throw new EntityPropertyNotArrayButSetAsAssociationMany(instance, propertyName);
     }
 
-    // now this is the thing, should we create collection or deal with simple array,
-    // for now parseArray is called, but we can create parseCollection
     instance[setterMethodName](this.parseArray(associationClass, instance[getterMethodName]()));
   }
 

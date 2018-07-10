@@ -5,6 +5,7 @@ import {EntityManagerEventService} from './service/entity-manager-event.service'
 import {UnitOfWorkService} from './service/unit-of-work.service';
 import {EntityManagerStateService} from './service/entity-manager-state.service';
 import {EntityManagerModifierService} from './service/entity-manager-modifier.service';
+import {EntityManagerMetaDataService} from './service/meta/entity-manager-meta-data.service';
 
 export interface EntityManagerModuleConfiguration {
   urlPrefix: string;
@@ -23,6 +24,7 @@ export let configuration;
     EntityManagerEventService,
     EntityManagerModifierService,
     EntityManagerStateService,
+    EntityManagerMetaDataService,
     UnitOfWorkService
   ],
   declarations: [],

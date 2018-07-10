@@ -1,12 +1,18 @@
 import 'reflect-metadata';
-import { EntityMetaHandler } from '../entity-meta-handler';
+import {Meta} from '../../service/meta/meta';
+import {EntityManagerMetaDataService} from '../../service/meta/entity-manager-meta-data.service';
 
 export function AssociationMany(associatedEntity: Object): Function {
 
     return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
-        target.constructor[EntityMetaHandler.META] = target.constructor[EntityMetaHandler.META] || {};
-        target.constructor[EntityMetaHandler.META][EntityMetaHandler.META_ASSOCIATIONS_MANY] = target.constructor[EntityMetaHandler.META][EntityMetaHandler.META_ASSOCIATIONS_MANY] || {};
+        const meta = new EntityManagerMetaDataService();
 
-        target.constructor[EntityMetaHandler.META][EntityMetaHandler.META_ASSOCIATIONS_MANY][propertyKey] = associatedEntity;
-    }
+        meta.createMetaData(target);
+
+        if (!meta.hasMetaDataProperty(target, Meta.META_ASSOCIATIONS_MANY)) {
+          meta.setMetaDataProperty(target, Meta.META_ASSOCIATIONS_MANY, {});
+        }
+
+        target.constructor[Meta.META][Meta.META_ASSOCIATIONS_MANY][propertyKey] = associatedEntity;
+    };
 }

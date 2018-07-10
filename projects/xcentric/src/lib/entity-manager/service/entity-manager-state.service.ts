@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
-import {EntityMetaHandler} from '../decorator/entity-meta-handler';
 import {Guid} from '../helper/guid';
+import {EntityManagerMetaDataService} from './meta/entity-manager-meta-data.service';
+import {Meta} from './meta/meta';
 
 export enum State {
     Create = 1,
@@ -11,11 +12,10 @@ export enum State {
 @Injectable()
 export class EntityManagerStateService {
 
-    private metaHandler: EntityMetaHandler = new EntityMetaHandler();
-
     public entities = {};
 
     public constructor(
+      private meta: EntityManagerMetaDataService
     ) {
         this.init();
     }
@@ -82,7 +82,7 @@ export class EntityManagerStateService {
     }
 
     private add(state: State, entity: Object): EntityManagerStateService {
-        this.metaHandler.setMetaProperty(entity, EntityMetaHandler.META_UNIQUE_ID, Guid.guid());
+        this.meta.setMetaDataProperty(entity, Meta.META_UNIQUE_ID, Guid.guid());
 
         this.entities[state][entity.constructor.name].push(entity);
 
@@ -109,10 +109,10 @@ export class EntityManagerStateService {
       let foundEntity = null;
 
       for (const stateEntity of entities) {
-        if (this.metaHandler.hasMetaProperty(stateEntity, EntityMetaHandler.META_UNIQUE_ID) &&
-          this.metaHandler.hasMetaProperty(entity, EntityMetaHandler.META_UNIQUE_ID) &&
-          this.metaHandler.getMetaProperty(stateEntity, EntityMetaHandler.META_UNIQUE_ID) ===
-          this.metaHandler.getMetaProperty(entity, EntityMetaHandler.META_UNIQUE_ID)
+        if (this.meta.hasMetaDataProperty(stateEntity, Meta.META_UNIQUE_ID) &&
+          this.meta.hasMetaDataProperty(entity, Meta.META_UNIQUE_ID) &&
+          this.meta.getMetaDataProperty(stateEntity, Meta.META_UNIQUE_ID) ===
+          this.meta.getMetaDataProperty(entity, Meta.META_UNIQUE_ID)
         ) {
           foundEntity = stateEntity;
         }

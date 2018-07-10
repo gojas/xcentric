@@ -1,21 +1,22 @@
-import { RouteNotDefined } from './error/route-not-defined.error';
+import {RouteNotDefined} from './error/route-not-defined.error';
+import {Meta} from '../service/meta/meta';
+import {EntityManagerMetaDataService} from '../service/meta/entity-manager-meta-data.service';
 
 export function Route(route: string) {
-    let constructor = null;
+    let target = null;
 
-    var f : any = function (...args) {
-        constructor = args[0];
+    return function (...args) {
+        target = args[0].prototype;
 
-        if (constructor && '' === route) {
-            throw new RouteNotDefined(constructor);
+        const metaService = new EntityManagerMetaDataService();
+
+        if (target && '' === route) {
+            throw new RouteNotDefined(target);
         }
 
-        if (constructor) {
-            constructor.meta = constructor.meta || {};
-
-            constructor.meta['route'] = route;
+        if (target) {
+            metaService.createMetaData(target)
+                .setMetaDataProperty(target, Meta.META_ROUTE, route);
         }
-    }
-
-    return f;
+    };
 }

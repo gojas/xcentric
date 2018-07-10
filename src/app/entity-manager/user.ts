@@ -1,10 +1,15 @@
 import {Route} from 'xcentric';
+import {Log} from './log';
+import {AssociationOne} from '../../../projects/xcentric/src/lib/entity-manager/decorator/associations/association-one';
 
 @Route('users')
 export class User {
 
   public id: number;
   public name: string;
+
+  @AssociationOne(Log)
+  public log: Log;
 
   public setId(id: number): User {
     this.id = id;

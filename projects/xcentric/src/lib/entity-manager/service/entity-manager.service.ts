@@ -13,36 +13,45 @@ import {Parser} from '../parser/parser';
 import {JsonParser} from '../parser/json.parser';
 import {IdParameterMissing} from '../error/id-parameter-missing.error';
 import {Observables} from './observables';
-import {EntityMetaHandler} from '../decorator/entity-meta-handler';
 import {configuration} from '../xcentric.entity-manager.module';
 import {UnitOfWorkService} from './unit-of-work.service';
+import {EntityManagerMetaDataService} from './meta/entity-manager-meta-data.service';
+import {Meta} from './meta/meta';
+import {EntityManagerEventService, EventType} from './entity-manager-event.service';
 
 @Injectable()
 export class EntityManagerService {
 
-  private metaHandler: EntityMetaHandler = new EntityMetaHandler();
   private parser: Parser = new JsonParser();
   private observables: Observables = new Observables();
 
   public constructor(
     private adapter: HttpClient,
-    private unitOfWorkService: UnitOfWorkService
+    private meta: EntityManagerMetaDataService,
+    private unitOfWorkService: UnitOfWorkService,
+    private event: EntityManagerEventService
   ) {
   }
 
   public persist(entity: Object): EntityManagerService {
+    this.event.run(entity, EventType.PrePersist);
+
     this.unitOfWorkService.persist(entity);
 
     return this;
   }
 
   public remove(entity: Object): EntityManagerService {
+    this.event.run(entity, EventType.PreRemove);
+
     this.unitOfWorkService.remove(entity);
 
     return this;
   }
 
   public flush(): Observable<any> {
+    this.event.runPreFlush();
+
     return this.unitOfWorkService.flush();
   }
 
@@ -52,7 +61,7 @@ export class EntityManagerService {
       throw new IdParameterMissing();
     }
 
-    const apiRoute = this.metaHandler.getRoute(new type());
+    const apiRoute = this.meta.getMetaDataProperty(new type(), Meta.META_ROUTE);
 
     return this.adapter
       .get(configuration.urlPrefix + apiRoute + '/' + id, {
@@ -65,7 +74,7 @@ export class EntityManagerService {
 
   public findMore(type: typeof Object, params: HttpParams = new HttpParams()): Observable<Object[]> {
 
-    const apiRoute = this.metaHandler.getRoute(new type());
+    const apiRoute = this.meta.getMetaDataProperty(new type(), Meta.META_ROUTE);
 
     return this.adapter
       .get(configuration.urlPrefix + apiRoute, {

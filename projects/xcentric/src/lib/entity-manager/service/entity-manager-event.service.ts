@@ -1,5 +1,6 @@
 import {Injectable, Injector} from '@angular/core';
 import {configuration, EntityManagerModuleConfiguration} from '../xcentric.entity-manager.module';
+import {EntityManagerStateService, State} from './entity-manager-state.service';
 
 export enum EventType {
   PrePost = 1,
@@ -18,7 +19,8 @@ export class EntityManagerEventService {
   private eventMapping: Object = {};
 
   public constructor(
-    private injector: Injector
+    private injector: Injector,
+    private state: EntityManagerStateService
   ) {
     this.configuration = configuration;
     this.createMapping();
@@ -36,6 +38,23 @@ export class EntityManagerEventService {
         listener[methodName](entity);
       }
     }
+  }
+
+  public runPreFlush(): EntityManagerEventService {
+
+    for (const entity of this.state.getEntities(State.Create)) {
+      this.run(entity, EventType.PrePost);
+    }
+
+    for (const entity of this.state.getEntities(State.Update)) {
+      this.run(entity, EventType.PrePut);
+    }
+
+    for (const entity of this.state.getEntities(State.Delete)) {
+      this.run(entity, EventType.PreDelete);
+    }
+
+    return this;
   }
 
   private createMapping(): void {

@@ -5,16 +5,14 @@ import {map} from 'rxjs/operators';
 import {HttpClient, HttpRequest} from '@angular/common/http';
 import {EntityIdMissing} from '../error/entity-id-missing.error';
 import {configuration} from '../xcentric.entity-manager.module';
-import {EntityMetaHandler} from '../decorator/entity-meta-handler';
 import {Parser} from '../parser/parser';
 import {JsonParser} from '../parser/json.parser';
-import {EntityManagerEventService, EventType} from './entity-manager-event.service';
 import {EntityManagerModifierService} from './entity-manager-modifier.service';
+import {EntityManagerMetaDataService} from './meta/entity-manager-meta-data.service';
+import {Meta} from './meta/meta';
 
 @Injectable()
 export class UnitOfWorkService {
-
-  private metaHandler: EntityMetaHandler = new EntityMetaHandler();
 
   // create parser FACTORY!
   private parser: Parser = new JsonParser();
@@ -22,23 +20,19 @@ export class UnitOfWorkService {
   public constructor(
     private connection: HttpClient,
     private state: EntityManagerStateService,
-    private event: EntityManagerEventService,
-    private modifier: EntityManagerModifierService
+    private modifier: EntityManagerModifierService,
+    private meta: EntityManagerMetaDataService
   ) {
 
   }
 
   public persist(entity: Object): UnitOfWorkService {
-    this.event.run(entity, EventType.PrePersist);
-
     this.state.persist(entity);
 
     return this;
   }
 
   public remove(entity: Object): UnitOfWorkService {
-    this.event.run(entity, EventType.PrePersist);
-
     this.state.remove(entity);
 
     return this;
@@ -46,16 +40,6 @@ export class UnitOfWorkService {
 
   public flush(): Observable<any> {
     const flush = [];
-
-    for (const entity of this.state.getEntities(State.Create)) {
-      this.event.run(entity, EventType.PrePost);
-    }
-    for (const entity of this.state.getEntities(State.Update)) {
-      this.event.run(entity, EventType.PrePut);
-    }
-    for (const entity of this.state.getEntities(State.Delete)) {
-      this.event.run(entity, EventType.PreDelete);
-    }
 
     for (const entity of this.state.getEntities(State.Create)) {
       flush.push(this.post(entity));
@@ -113,14 +97,14 @@ export class UnitOfWorkService {
   }
 
   private getPostRequest(toCreateEntity: Object): HttpRequest<any> {
-    const apiRoute = this.metaHandler.getRoute(toCreateEntity);
+    const apiRoute = this.meta.getMetaDataProperty(toCreateEntity, Meta.META_ROUTE);
 
     return this.modifier.modifyRequest(toCreateEntity, new HttpRequest<any>('POST', configuration.urlPrefix + apiRoute, toCreateEntity));
   }
 
   private getPutRequest(toUpdateEntity: Object): HttpRequest<any> {
     const id = +toUpdateEntity['id'],
-      apiRoute = this.metaHandler.getRoute(toUpdateEntity);
+      apiRoute = this.meta.getMetaDataProperty(toUpdateEntity, Meta.META_ROUTE);
 
     if (!id) {
       throw new EntityIdMissing(toUpdateEntity);
@@ -134,7 +118,7 @@ export class UnitOfWorkService {
 
   private getDeleteRequest(toDeleteEntity: Object): HttpRequest<any> {
     const id = +toDeleteEntity['id'],
-      apiRoute = this.metaHandler.getRoute(toDeleteEntity);
+      apiRoute = this.meta.getMetaDataProperty(toDeleteEntity, Meta.META_ROUTE);
 
     if (!id) {
       throw new EntityIdMissing(toDeleteEntity);
