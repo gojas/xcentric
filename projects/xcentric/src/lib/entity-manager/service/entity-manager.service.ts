@@ -55,12 +55,13 @@ export class EntityManagerService {
     return this.unitOfWorkService.flush();
   }
 
-  public findOne(type: typeof Object, id: number, params: HttpParams = new HttpParams()): Observable<Object> {
-    id = +id;
+  public findOne(type: typeof Object, params: any = {}): Observable<Object> {
+    const id = +params.id;
     if (!id) {
       throw new IdParameterMissing();
     }
-
+    
+    const httpParams: HttpParams = Http.objectToHttpParams(params);
     const apiRoute = this.meta.getMetaDataProperty(new type(), Meta.META_ROUTE);
 
     return this.adapter
