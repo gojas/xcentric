@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {EntityManagerService} from 'xcentric';
-import {User} from './entity-manager/user';
+import { User } from './entity-manager/user';
 
 @Component({
   selector: 'app-root',
@@ -24,5 +24,7 @@ export class AppComponent {
 
     this.em.flush()
         .subscribe();
+
+    this.em.getRepository().find(User, 1).subscribe();
   }
 }
