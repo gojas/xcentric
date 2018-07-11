@@ -2,7 +2,7 @@ import {Route} from 'xcentric';
 import {Log} from './log';
 import {AssociationOne} from '../../../projects/xcentric/src/lib/entity-manager/decorator/associations/association-one';
 
-@Route('users')
+@Route('app/users')
 export class User {
 
   public id: number;

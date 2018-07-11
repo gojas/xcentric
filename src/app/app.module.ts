@@ -39,7 +39,7 @@ import {UserModifier} from './entity-manager/user.modifier';
     BrowserModule,
     BrowserAnimationsModule,
     XcentricEntityManagerModule.forRoot({
-      urlPrefix: 'yo/',
+      urlPrefix: 'http://puzzle.local/api/',
       listeners: [
         UserListener
       ],
