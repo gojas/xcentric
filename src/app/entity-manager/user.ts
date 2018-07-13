@@ -1,8 +1,10 @@
-import {Route} from 'xcentric';
+import {Route, Repository} from 'xcentric';
 import {Log} from './log';
 import {AssociationOne} from '../../../projects/xcentric/src/lib/entity-manager/decorator/associations/association-one';
+import {UserRepository} from './user.repository';
 
 @Route('app/users')
+@Repository(UserRepository)
 export class User {
 
   public id: number;

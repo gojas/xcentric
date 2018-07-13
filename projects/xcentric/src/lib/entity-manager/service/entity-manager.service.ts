@@ -45,8 +45,8 @@ export class EntityManagerService {
     return this.unitOfWorkService.flush();
   }
 
-  public getRepository(): EntityManagerRepositoryService {
-    return this.repository;
+  public getRepository(entity: any): EntityManagerRepositoryService|any {
+    return this.repository.createRepository(entity);
   }
 
   public add(observable: Observable<any>): EntityManagerService {

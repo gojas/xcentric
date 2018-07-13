@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import {
     HttpClient,
     HttpParams,
@@ -7,7 +7,7 @@ import {
 import {Observable} from 'rxjs';
 import {forkJoin} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {configuration} from '../xcentric.entity-manager.module';
+import {configuration, EntityManagerModuleConfiguration} from '../xcentric.entity-manager.module';
 import {IdParameterMissing} from '../error/id-parameter-missing.error';
 import {Http} from '../helper/http';
 import {EntityManagerMetaDataService} from './meta/entity-manager-meta-data.service';
@@ -15,18 +15,44 @@ import {EntityManagerModifierService} from './entity-manager-modifier.service';
 import {Meta} from './meta/meta';
 import {Parser} from '../parser/parser';
 import {JsonParser} from '../parser/json.parser';
+import {EntityRepository} from './repository/entity-repository';
+import {RepositoryMustDeriveFromEntityRepository} from '../error/repository-must-derive-from-entity-repository';
 
 @Injectable()
 export class EntityManagerRepositoryService {
 
     private parser: Parser = new JsonParser();
 
+    private configuration: EntityManagerModuleConfiguration;
+
     public constructor(
         private connection: HttpClient,
         private meta: EntityManagerMetaDataService,
-        private modifier: EntityManagerModifierService
+        private modifier: EntityManagerModifierService,
+        private injector: Injector
     ) {
+      this.configuration = configuration;
+    }
 
+    public createRepository(entityType: any): EntityManagerRepositoryService {
+      const repositoriesTypes = this.configuration.repositories || [];
+
+      let repository = this;
+
+      for (const repositoryType of repositoriesTypes) {
+        if (entityType.constructor.name === repositoryType.constructor.name) {
+          repository = this.injector.get(repositoryType);
+
+          if (repository instanceof EntityRepository) {
+            repository.repository = this;
+            repository.entityType = entityType;
+          } else {
+            throw new RepositoryMustDeriveFromEntityRepository(repository);
+          }
+        }
+      }
+
+      return repository;
     }
 
     public find(type: any, id: number): Observable<Object> {

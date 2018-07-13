@@ -12,6 +12,7 @@ export interface EntityManagerModuleConfiguration {
   urlPrefix: string;
   listeners?: any[];
   modifiers?: any[];
+  repositories?: any[];
 }
 
 export let configuration;
@@ -46,6 +47,10 @@ export class XcentricEntityManagerModule {
 
     for (const modifier of configuration.modifiers) {
       providers.push(modifier);
+    }
+
+    for (const repository of configuration.repositories) {
+      providers.push(repository);
     }
 
     return {

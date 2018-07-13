@@ -17,6 +17,7 @@ import {DraggableTargetDirective} from './modularo/directive/drag/draggable-targ
 import {XcentricEntityManagerModule} from 'xcentric';
 import {UserListener} from './entity-manager/user.listener';
 import {UserModifier} from './entity-manager/user.modifier';
+import { UserRepository } from 'src/app/entity-manager/user.repository';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,9 @@ import {UserModifier} from './entity-manager/user.modifier';
       ],
       modifiers: [
         UserModifier
+      ],
+      repositories: [
+        UserRepository
       ]
     }),
     SidebarModule,
