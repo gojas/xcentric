@@ -3,9 +3,8 @@ import {
     HttpClient,
     HttpParams,
     HttpRequest
-  } from '@angular/common/http';
+} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {forkJoin} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {configuration, EntityManagerModuleConfiguration} from '../xcentric.entity-manager.module';
 import {IdParameterMissing} from '../error/id-parameter-missing.error';
@@ -63,7 +62,7 @@ export class EntityManagerRepositoryService {
 
       const apiRoute = this.meta.getMetaDataProperty(new type(), Meta.META_ROUTE),
           request = this.modifier.modifyRequest(
-              new type(), 
+              new type(),
               new HttpRequest<any>('GET', configuration.urlPrefix + apiRoute + '/' + id)
           );
 
@@ -82,12 +81,12 @@ export class EntityManagerRepositoryService {
 
       const apiRoute = this.meta.getMetaDataProperty(new type(), Meta.META_ROUTE),
         request = this.modifier.modifyRequest(
-            new type(), 
+            new type(),
             new HttpRequest<any>('GET', configuration.urlPrefix + apiRoute, {
               params: httpParams
             })
         );
-  
+
       return this.connection
         .get(request.url, {
           headers: request.headers,
@@ -97,18 +96,18 @@ export class EntityManagerRepositoryService {
           return this.parser.parse(new type(), loadedEntity);
         }));
     }
-    
+
     public findMore(type: typeof Object, params: any = {}): Observable<Object[]> {
       const httpParams: HttpParams = Http.objectToHttpParams(params);
 
       const apiRoute = this.meta.getMetaDataProperty(new type(), Meta.META_ROUTE),
         request = this.modifier.modifyRequest(
-            new type(), 
+            new type(),
             new HttpRequest<any>('GET', configuration.urlPrefix + apiRoute, {
               params: httpParams
             })
         );
-  
+
       return this.connection
         .get(request.url, {
           headers: request.headers,
@@ -116,13 +115,13 @@ export class EntityManagerRepositoryService {
         })
         .pipe(map((loadedEntities: any[]) => {
           const parsedEntities = [];
-  
+
           for (const loadedEntity of loadedEntities) {
             const entity = this.parser.parse(new type(), loadedEntity);
-  
+
             parsedEntities.push(entity);
           }
-  
+
           return parsedEntities;
         }));
     }
