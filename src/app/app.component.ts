@@ -25,6 +25,10 @@ export class AppComponent {
     this.em.flush()
         .subscribe();
 
-    this.em.getRepository(User).test(1).subscribe();
+    this.em.getRepository(User)
+      .findOneUserById(1)
+      .subscribe((user: User) => {
+        console.log(user.getId(), user.getName());
+      });
   }
 }

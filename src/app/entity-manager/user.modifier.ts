@@ -7,9 +7,9 @@ export class UserModifier {
 
   public modifyRequest(entity: Object, request: HttpRequest<any>): HttpRequest<any>  {
 
-    if (entity instanceof User && request.method === 'POST') {
+    if (entity instanceof User) {
       request = request.clone({
-        url: 'smola'
+        url: 'assets/user.json'
       });
     }
 

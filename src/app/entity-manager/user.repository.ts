@@ -6,7 +6,7 @@ import {EntityRepository} from 'xcentric';
 @Injectable()
 export class UserRepository extends EntityRepository {
 
-  public test(id: number): Observable<Object> {
+  public findOneUserById(id: number): Observable<Object> {
     console.log('test success');
     return this.find(id);
   }
