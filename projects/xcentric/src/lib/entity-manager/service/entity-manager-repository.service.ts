@@ -11,16 +11,13 @@ import {IdParameterMissing} from '../error/id-parameter-missing.error';
 import {Http} from '../helper/http';
 import {EntityManagerMetaDataService} from './meta/entity-manager-meta-data.service';
 import {EntityManagerModifierService} from './entity-manager-modifier.service';
+import {EntityManagerParserService} from './parser/entity-manager-parser.service';
 import {Meta} from './meta/meta';
-import {Parser} from '../parser/parser';
-import {JsonParser} from '../parser/json.parser';
 import {EntityRepository} from './repository/entity-repository';
-import {RepositoryMustDeriveFromEntityRepository} from '../error/repository-must-derive-from-entity-repository';
+import {RepositoryMustDeriveFromEntityRepository} from '../error/repository-must-derive-from-entity-repository.error';
 
 @Injectable()
 export class EntityManagerRepositoryService {
-
-    private parser: Parser = new JsonParser();
 
     private configuration: EntityManagerModuleConfiguration;
 
@@ -28,7 +25,8 @@ export class EntityManagerRepositoryService {
         private connection: HttpClient,
         private meta: EntityManagerMetaDataService,
         private modifier: EntityManagerModifierService,
-        private injector: Injector
+        private injector: Injector,
+        private parser: EntityManagerParserService
     ) {
       this.configuration = configuration;
     }
@@ -72,7 +70,7 @@ export class EntityManagerRepositoryService {
               params: request.params
           })
           .pipe(map((loadedEntity: any) => {
-              return this.parser.parse(new type(), loadedEntity);
+              return this.parser.getParser().parse(new type(), loadedEntity);
           }));
     }
 
@@ -93,7 +91,7 @@ export class EntityManagerRepositoryService {
           params: request.params
         })
         .pipe(map((loadedEntity: any) => {
-          return this.parser.parse(new type(), loadedEntity);
+          return this.parser.getParser().parse(new type(), loadedEntity);
         }));
     }
 
@@ -117,7 +115,7 @@ export class EntityManagerRepositoryService {
           const parsedEntities = [];
 
           for (const loadedEntity of loadedEntities) {
-            const entity = this.parser.parse(new type(), loadedEntity);
+            const entity = this.parser.getParser().parse(new type(), loadedEntity);
 
             parsedEntities.push(entity);
           }

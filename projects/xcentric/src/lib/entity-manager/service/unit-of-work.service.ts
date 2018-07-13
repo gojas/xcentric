@@ -5,23 +5,20 @@ import {map} from 'rxjs/operators';
 import {HttpClient, HttpRequest} from '@angular/common/http';
 import {EntityIdMissing} from '../error/entity-id-missing.error';
 import {configuration} from '../xcentric.entity-manager.module';
-import {Parser} from '../parser/parser';
-import {JsonParser} from '../parser/json.parser';
 import {EntityManagerModifierService} from './entity-manager-modifier.service';
 import {EntityManagerMetaDataService} from './meta/entity-manager-meta-data.service';
+import {EntityManagerParserService} from './parser/entity-manager-parser.service';
 import {Meta} from './meta/meta';
 
 @Injectable()
 export class UnitOfWorkService {
 
-  // create parser FACTORY!
-  private parser: Parser = new JsonParser();
-
   public constructor(
     private connection: HttpClient,
     private state: EntityManagerStateService,
     private modifier: EntityManagerModifierService,
-    private meta: EntityManagerMetaDataService
+    private meta: EntityManagerMetaDataService,
+    private parser: EntityManagerParserService
   ) {
 
   }
@@ -73,7 +70,7 @@ export class UnitOfWorkService {
       request.url,
       request.body
     ).pipe(map((loadedEntity: any) => {
-      return this.parser.parse(toCreateEntity, loadedEntity);
+      return this.parser.getParser().parse(toCreateEntity, loadedEntity);
     }));
   }
 
@@ -84,7 +81,7 @@ export class UnitOfWorkService {
       request.url,
       request.body
     ).pipe(map((loadedEntity: any) => {
-      return this.parser.parse(toUpdateEntity, loadedEntity);
+      return this.parser.getParser().parse(toUpdateEntity, loadedEntity);
     }));
   }
 

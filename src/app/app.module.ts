@@ -17,7 +17,8 @@ import {DraggableTargetDirective} from './modularo/directive/drag/draggable-targ
 import {XcentricEntityManagerModule} from 'xcentric';
 import {UserListener} from './entity-manager/user.listener';
 import {UserModifier} from './entity-manager/user.modifier';
-import { UserRepository } from 'src/app/entity-manager/user.repository';
+import {UserRepository} from 'src/app/entity-manager/user.repository';
+import {CustomParser} from './entity-manager/custom.parser';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { UserRepository } from 'src/app/entity-manager/user.repository';
     BrowserAnimationsModule,
     XcentricEntityManagerModule.forRoot({
       urlPrefix: 'http://puzzle.local/api/',
+      parser: CustomParser,
       listeners: [
         UserListener
       ],

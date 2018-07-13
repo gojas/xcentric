@@ -2,6 +2,7 @@ import {ModuleWithProviders, NgModule} from '@angular/core';
 import {EntityManagerService} from './service/entity-manager.service';
 import {HttpClientModule} from '@angular/common/http';
 import {EntityManagerEventService} from './service/entity-manager-event.service';
+import {EntityManagerParserService} from './service/parser/entity-manager-parser.service';
 import {UnitOfWorkService} from './service/unit-of-work.service';
 import {EntityManagerStateService} from './service/entity-manager-state.service';
 import {EntityManagerModifierService} from './service/entity-manager-modifier.service';
@@ -10,6 +11,7 @@ import {EntityManagerRepositoryService} from './service/entity-manager-repositor
 
 export interface EntityManagerModuleConfiguration {
   urlPrefix: string;
+  parser?: any;
   listeners?: any[];
   modifiers?: any[];
   repositories?: any[];
@@ -24,6 +26,7 @@ export let configuration;
   providers: [
     EntityManagerService,
     EntityManagerEventService,
+    EntityManagerParserService,
     EntityManagerModifierService,
     EntityManagerStateService,
     EntityManagerMetaDataService,

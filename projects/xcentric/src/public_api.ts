@@ -12,3 +12,5 @@ export * from './lib/entity-manager/decorator/route';
 export * from './lib/entity-manager/decorator/repository';
 
 export * from './lib/entity-manager/event/listener';
+
+export * from './lib/entity-manager/parser/abstract-parser';
