@@ -14,13 +14,13 @@ export class EntityManagerParserService {
   }
 
   public getParser(): AbstractParser {
-    const parser: any = configuration.parser || JsonParser;
+    const parserType: any = configuration.parser || JsonParser,
+      parser = new parserType();
 
     if ( !(parser instanceof AbstractParser) ) {
-      console.error(`${parser.constructor.name} must derive from AbstractParser!`);
-      //throw new ParserMustDeriveFromAbstractParser(parser);
+      throw new ParserMustDeriveFromAbstractParser(parser);
     }
 
-    return new parser();
+    return parser;
   }
 }

@@ -7,7 +7,8 @@ import {UnitOfWorkService} from './service/unit-of-work.service';
 import {EntityManagerStateService} from './service/entity-manager-state.service';
 import {EntityManagerModifierService} from './service/entity-manager-modifier.service';
 import {EntityManagerMetaDataService} from './service/meta/entity-manager-meta-data.service';
-import {EntityManagerRepositoryService} from './service/entity-manager-repository.service';
+import {EntityRepository} from './service/repository/entity-repository';
+import {EntityManagerRepositoryFactoryService} from './service/repository/entity-manager-repository-factory.service';
 
 export interface EntityManagerModuleConfiguration {
   urlPrefix: string;
@@ -30,7 +31,8 @@ export let configuration;
     EntityManagerModifierService,
     EntityManagerStateService,
     EntityManagerMetaDataService,
-    EntityManagerRepositoryService,
+    EntityRepository,
+    EntityManagerRepositoryFactoryService,
     UnitOfWorkService
   ],
   declarations: [],

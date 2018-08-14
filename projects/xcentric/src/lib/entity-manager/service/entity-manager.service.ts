@@ -4,7 +4,8 @@ import {forkJoin} from 'rxjs';
 import {Observables} from './observables';
 import {UnitOfWorkService} from './unit-of-work.service';
 import {EntityManagerEventService, EventType} from './entity-manager-event.service';
-import {EntityManagerRepositoryService} from './entity-manager-repository.service';
+import {EntityManagerRepositoryFactoryService} from './repository/entity-manager-repository-factory.service';
+import {EntityRepository} from './repository/entity-repository';
 
 @Injectable()
 export class EntityManagerService {
@@ -14,7 +15,7 @@ export class EntityManagerService {
   public constructor(
     private unitOfWorkService: UnitOfWorkService,
     private event: EntityManagerEventService,
-    private repository: EntityManagerRepositoryService
+    private repositoryFactory: EntityManagerRepositoryFactoryService
   ) {
   }
 
@@ -40,8 +41,8 @@ export class EntityManagerService {
     return this.unitOfWorkService.flush();
   }
 
-  public getRepository(entity: any): EntityManagerRepositoryService|any {
-    return this.repository.createRepository(entity);
+  public getRepository(entity: any): EntityRepository|any {
+    return this.repositoryFactory.createRepository(entity);
   }
 
   public add(observable: Observable<any>): EntityManagerService {

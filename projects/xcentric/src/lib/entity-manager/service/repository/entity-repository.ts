@@ -1,28 +1,116 @@
-import {EntityManagerRepositoryService} from '../entity-manager-repository.service';
 import {Observable} from 'rxjs';
-
-export interface RepositoryAware {
-    repository: EntityManagerRepositoryService;
-}
+import {Injectable} from '@angular/core';
+import {map} from 'rxjs/operators';
+import {HttpClient, HttpParams, HttpRequest} from '@angular/common/http';
+import {Http} from '../../helper/http';
+import {configuration, EntityManagerModuleConfiguration} from '../../xcentric.entity-manager.module';
+import {IdParameterMissing} from '../../error/id-parameter-missing.error';
+import {Meta} from '../meta/meta';
+import {EntityManagerModifierService} from '../entity-manager-modifier.service';
+import {EntityManagerMetaDataService} from '../meta/entity-manager-meta-data.service';
+import {EntityManagerParserService} from '../parser/entity-manager-parser.service';
 
 export interface EntityTypeAware {
     entityType: any;
 }
 
-export class EntityRepository implements RepositoryAware, EntityTypeAware {
-    
+@Injectable()
+export class EntityRepository implements EntityTypeAware {
+
+    private configuration: EntityManagerModuleConfiguration;
+
     public entityType: any;
-    public repository: EntityManagerRepositoryService;
+
+    public constructor(
+      private connection: HttpClient,
+      private meta: EntityManagerMetaDataService,
+      private modifier: EntityManagerModifierService,
+      private parser: EntityManagerParserService
+    ) {
+      this.configuration = configuration;
+    }
 
     public find(id: number): Observable<Object> {
-        return this.repository.find(this.entityType, id);
+        return this.doFind(this.entityType, id);
     }
 
     public findOne(params: any): Observable<Object> {
-        return this.repository.findOne(this.entityType, params);
+        return this.doFindOne(this.entityType, params);
     }
-  
+
     public findMore(params: any): Observable<Object[]> {
-        return this.repository.findMore(this.entityType, params);
+        return this.doFindMore(this.entityType, params);
+    }
+
+    private doFind(type: any, id: number): Observable<Object> {
+      id = +id;
+      if (!id) {
+        throw new IdParameterMissing();
+      }
+
+      const apiRoute = this.meta.getMetaDataProperty(new type(), Meta.META_ROUTE),
+        request = this.modifier.modifyRequest(
+          new type(),
+          new HttpRequest<any>('GET', configuration.urlPrefix + apiRoute + '/' + id)
+        );
+
+      return this.connection
+        .get(request.url, {
+          headers: request.headers,
+          params: request.params
+        })
+        .pipe(map((loadedEntity: any) => {
+          return this.parser.getParser().parse(new type(), loadedEntity);
+        }));
+    }
+
+    public doFindOne(type: any, params: any = {}): Observable<Object> {
+      const httpParams: HttpParams = Http.objectToHttpParams(params);
+
+      const apiRoute = this.meta.getMetaDataProperty(new type(), Meta.META_ROUTE),
+        request = this.modifier.modifyRequest(
+          new type(),
+          new HttpRequest<any>('GET', configuration.urlPrefix + apiRoute, {
+            params: httpParams
+          })
+        );
+
+      return this.connection
+        .get(request.url, {
+          headers: request.headers,
+          params: request.params
+        })
+        .pipe(map((loadedEntity: any) => {
+          return this.parser.getParser().parse(new type(), loadedEntity);
+        }));
+    }
+
+    public doFindMore(type: typeof Object, params: any = {}): Observable<Object[]> {
+      const httpParams: HttpParams = Http.objectToHttpParams(params);
+
+      const apiRoute = this.meta.getMetaDataProperty(new type(), Meta.META_ROUTE),
+        request = this.modifier.modifyRequest(
+          new type(),
+          new HttpRequest<any>('GET', configuration.urlPrefix + apiRoute, {
+            params: httpParams
+          })
+        );
+
+      return this.connection
+        .get(request.url, {
+          headers: request.headers,
+          params: request.params
+        })
+        .pipe(map((loadedEntities: any[]) => {
+          const parsedEntities = [];
+
+          for (const loadedEntity of loadedEntities) {
+            const entity = this.parser.getParser().parse(new type(), loadedEntity);
+
+            parsedEntities.push(entity);
+          }
+
+          return parsedEntities;
+        }));
     }
 }

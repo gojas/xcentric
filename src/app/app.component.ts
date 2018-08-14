@@ -23,12 +23,21 @@ export class AppComponent {
     this.em.persist(user2);
 
     this.em.flush()
-        .subscribe();
+        .subscribe((yo) => {
+          console.log(yo);
+        });
 
     this.em.getRepository(User)
       .findOneUserById(1)
-      .subscribe((user: User) => {
-        console.log(user.getId(), user.getName());
+      .subscribe((foundUser: User) => {
+        console.log(foundUser.getId(), foundUser.getName());
       });
+    /**
+    this.em.getRepository(User).findMore({
+      limit: 50
+    }).subscribe((users: User[]) => {
+      console.log(users);
+    });
+ **/
   }
 }
