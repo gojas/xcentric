@@ -41,7 +41,7 @@ import {CustomParser} from './entity-manager/custom.parser';
     BrowserModule,
     BrowserAnimationsModule,
     XcentricEntityManagerModule.forRoot({
-      urlPrefix: 'assets/',
+      urlPrefix: 'http://puzzle.local/api/',
       parser: CustomParser,
       listeners: [
         UserListener

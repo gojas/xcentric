@@ -3,12 +3,12 @@ import {Log} from './log';
 import {AssociationOne} from '../../../projects/xcentric/src/lib/entity-manager/decorator/associations/association-one';
 import {UserRepository} from './user.repository';
 
-@Route('users')
+@Route('app/users')
 @Repository(UserRepository)
 export class User {
 
   public id: number;
-  public name: string;
+  public firstName: string;
 
   @AssociationOne(Log)
   public log: Log;
@@ -22,12 +22,12 @@ export class User {
     return this.id;
   }
 
-  public setName(name: string): User {
-    this.name = name;
+  public setFirstName(name: string): User {
+    this.firstName = name;
     return this;
   }
 
-  public getName(): string {
-    return this.name;
+  public getFirstName(): string {
+    return this.firstName;
   }
 }

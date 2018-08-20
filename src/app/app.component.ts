@@ -14,23 +14,23 @@ export class AppComponent {
     private em: EntityManagerService
   ) {
 
-    const user = new User().setName('One').setId(1);
+    const user = new User().setFirstName('One').setId(1);
     this.em.persist(user);
-    user.setName('CHANGED');
+    user.setFirstName('CHANGED');
     this.em.persist(user);
 
-    const user2 = new User().setName('Two');
+    const user2 = new User().setFirstName('Two');
     this.em.persist(user2);
 
     this.em.flush()
-        .subscribe((yo) => {
-          console.log(yo);
+        .subscribe((entities) => {
+          console.log(entities, user, user2);
         });
 
     this.em.getRepository(User)
       .findOneUserById(1)
       .subscribe((foundUser: User) => {
-        console.log(foundUser.getId(), foundUser.getName());
+        console.log(foundUser.getId(), foundUser.getFirstName());
       });
     /**
     this.em.getRepository(User).findMore({

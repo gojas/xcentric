@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {EntityManagerStateService, State} from './entity-manager-state.service';
 import {forkJoin, Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {HttpClient, HttpRequest} from '@angular/common/http';
+import {HttpClient, HttpRequest, HttpResponse} from '@angular/common/http';
 import {EntityIdMissing} from '../error/entity-id-missing.error';
 import {configuration} from '../xcentric.entity-manager.module';
 import {EntityManagerModifierService} from './entity-manager-modifier.service';
@@ -57,7 +57,7 @@ export class UnitOfWorkService {
           () => {
             this.state.clear();
 
-            observer.next({});
+            observer.next();
             observer.complete();
           });
     });
@@ -66,31 +66,31 @@ export class UnitOfWorkService {
   private post(toCreateEntity: Object): Observable<Object> {
     const request = this.getPostRequest(toCreateEntity);
 
-    return this.connection.post(
-      request.url,
-      request.body
-    ).pipe(map((loadedEntity: any) => {
-      return this.parser.getParser().parse(toCreateEntity, loadedEntity);
-    }));
+    return this.connection
+      .request(request)
+      .pipe(map((response: HttpResponse<any>) => {
+        toCreateEntity = this.parser.getParser().parse(toCreateEntity, response.body);
+
+        return toCreateEntity;
+      }));
   }
 
   private put(toUpdateEntity: Object): Observable<Object> {
     const request = this.getPutRequest(toUpdateEntity);
 
-    return this.connection.put(
-      request.url,
-      request.body
-    ).pipe(map((loadedEntity: any) => {
-      return this.parser.getParser().parse(toUpdateEntity, loadedEntity);
-    }));
+    return this.connection
+      .request(request)
+      .pipe(map((response: HttpResponse<any>) => {
+        toUpdateEntity = this.parser.getParser().parse(toUpdateEntity, response.body);
+
+        return toUpdateEntity;
+      }));
   }
 
   private delete(toDeleteEntity: Object): Observable<any> {
     const request = this.getDeleteRequest(toDeleteEntity);
 
-    return this.connection.delete(
-      request.url
-    );
+    return this.connection.request(request);
   }
 
   private getPostRequest(toCreateEntity: Object): HttpRequest<any> {
