@@ -1,0 +1,7 @@
+<div *ngIf="serviceContainer.context.getContext() === 1">
+  <button (click)="onEditComponent()" pButton type="button" label="Edit"></button>
+  <button (click)="onRemoveComponent()" pButton type="button" label="Remove" class="ui-button-danger"></button>
+</div>
+
+<!-- container with actual component -->
+<ng-template #container></ng-template>

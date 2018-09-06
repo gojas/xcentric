@@ -3,6 +3,7 @@ import {ComponentConfiguration} from '../service/component-configuration';
 import {ComponentRegistryConfiguration} from '../service/component-registry';
 import {ContainerService} from '../service/container.service';
 import {ContextType} from '../service/context/context-type';
+import {WrapperComponent} from './wrapper/wrapper.component';
 
 export interface Tree {
   getChildren(): AbstractComponent[];
@@ -12,18 +13,12 @@ export interface Tree {
 export abstract class AbstractComponent implements Tree {
 
   public configuration: ComponentConfiguration = null;
+  public wrapperComponent: WrapperComponent = null;
 
   parent: AbstractComponent = null;
   children: AbstractComponent[] = [];
 
   @ViewChild('container', {read: ViewContainerRef}) container: ViewContainerRef;
-
-  @HostListener('mousedown') onClick() {
-    if ( this.serviceContainer.context.getContext() === ContextType.Admin ) {
-      // show edit panel based on ComponentConfiguration
-      console.log(this);
-    }
-  }
 
   public constructor(
     protected serviceContainer: ContainerService

@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AbstractComponent} from '../abstract.component';
 import {ContainerService} from '../../service/container.service';
+import {ContextType} from '../../service/context/context-type';
 
 @Component({
   selector: 'app-component-grid',

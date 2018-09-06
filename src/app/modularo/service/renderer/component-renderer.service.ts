@@ -14,6 +14,8 @@ import {AbstractComponent} from '../../component/abstract.component';
 })
 export class ComponentRendererService {
 
+  public mainContainer: ViewContainerRef = null;
+
   private renderer: Renderer2;
 
   public constructor(
@@ -26,6 +28,8 @@ export class ComponentRendererService {
   public renderComponent(component: any, renderTo: ViewContainerRef): AbstractComponent {
     const componentRef = this.renderTo(component, renderTo);
 
+    componentRef.instance.hostView = componentRef;
+
     return componentRef.instance;
   }
 
@@ -35,7 +39,12 @@ export class ComponentRendererService {
   }
 
   public removeComponent(component: AbstractComponent): ComponentRendererService {
-    // todo
+    const wrapperComponent = component.wrapperComponent;
+
+    wrapperComponent.viewContainerRef.clear();
+
+    const index = this.mainContainer.indexOf(wrapperComponent.hostView);
+    this.mainContainer.remove(index);
 
     return this;
   }

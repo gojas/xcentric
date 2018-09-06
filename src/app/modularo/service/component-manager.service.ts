@@ -14,6 +14,13 @@ export class ComponentManagerService {
   }
 
   public remove(component: AbstractComponent): this {
+    const id = component.configuration.id;
+
+    const index = this.getAll().findIndex((aComponent: AbstractComponent) => {
+      return aComponent.configuration.id === id;
+    });
+
+    this.getAll().splice(index, 1);
 
     return this;
   }

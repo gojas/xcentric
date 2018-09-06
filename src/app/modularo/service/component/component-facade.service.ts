@@ -4,6 +4,7 @@ import {ComponentRendererService} from '../renderer/component-renderer.service';
 import {ComponentRegistryConfiguration} from '../component-registry';
 import {AbstractComponent} from '../../component/abstract.component';
 import {ComponentConfiguration} from '../component-configuration';
+import {WrapperComponent} from '../../component/wrapper/wrapper.component';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,7 @@ export class ComponentFacadeService {
   public create(registryConfiguration: ComponentRegistryConfiguration,
                 toContainer: ViewContainerRef,
                 parent: AbstractComponent = null
-  ): ComponentFacadeService {
+  ): any {
 
     const configuration = this.createComponentConfiguration(registryConfiguration);
     const component = this.createComponent(configuration, toContainer, parent);
@@ -29,7 +30,7 @@ export class ComponentFacadeService {
       this.manager.add(component);
     }
 
-    return this;
+    return component;
   }
 
   public remove(component: AbstractComponent): ComponentFacadeService {
