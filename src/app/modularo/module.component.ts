@@ -7,6 +7,7 @@ import {ComponentRegistryConfiguration} from './service/component-registry';
 import {ComponentFacadeService} from './service/component/component-facade.service';
 import {WrapperComponent} from './component/wrapper/wrapper.component';
 import {ComponentType} from './service/component-type';
+import {AbstractComponent} from './component/abstract.component';
 
 @Component({
   selector: 'app-module',
@@ -16,6 +17,9 @@ import {ComponentType} from './service/component-type';
 export class ModuleComponent implements OnInit {
 
   public isSidePanelVisible = false;
+
+  public editComponent: AbstractComponent = null;
+  public isSidePanelComponentEditVisible = false;
 
   @ViewChild('container', {read: ViewContainerRef}) container: ViewContainerRef;
 
@@ -45,7 +49,7 @@ export class ModuleComponent implements OnInit {
 
     if (content instanceof ComponentRegistryConfiguration) {
       const wrapperComponent = this.facade.create(
-        new ComponentRegistryConfiguration(WrapperComponent, ComponentType.Panel, 'wrapper'),
+        new ComponentRegistryConfiguration(WrapperComponent, ComponentType.Panel, 'wrapper', null),
         this.container
       );
 
@@ -55,6 +59,7 @@ export class ModuleComponent implements OnInit {
       );
 
       wrapperComponent.component = component;
+      wrapperComponent.mainComponent = this;
       component.wrapperComponent = wrapperComponent;
     }
 

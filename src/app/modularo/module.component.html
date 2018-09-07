@@ -2,6 +2,10 @@
   <app-admin-side-panel [mainComponent]="this"></app-admin-side-panel>
 </p-sidebar>
 
+<p-sidebar *ngIf="isSidePanelComponentEditVisible" [(visible)]="isSidePanelComponentEditVisible" position="right">
+  <app-admin-edit-component [editComponent]="editComponent" [mainComponent]="this"></app-admin-edit-component>
+</p-sidebar>
+
 <button type="text" (click)="isSidePanelVisible = true" pButton icon="pi pi-plus" label="Show"></button>
 
 <button type="text" (click)="onChangeContext($event)" pButton icon="pi pi-plus" label="Set Admin Context"></button>

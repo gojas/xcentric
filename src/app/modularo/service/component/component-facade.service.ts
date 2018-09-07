@@ -45,7 +45,8 @@ export class ComponentFacadeService {
       '1',
       'New One',
       registryConfiguration.component,
-      registryConfiguration.type
+      registryConfiguration.type,
+      registryConfiguration.editComponent
     );
   }
 
