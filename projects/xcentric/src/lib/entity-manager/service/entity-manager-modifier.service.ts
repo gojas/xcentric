@@ -1,6 +1,6 @@
 import {Injectable, Injector} from '@angular/core';
 import {configuration, EntityManagerModuleConfiguration} from '../xcentric.entity-manager.module';
-import {HttpRequest} from '@angular/common/http';
+import {HttpRequest, HttpResponse} from '@angular/common/http';
 
 @Injectable()
 export class EntityManagerModifierService {
@@ -25,5 +25,19 @@ export class EntityManagerModifierService {
     }
 
     return request;
+  }
+
+  public modifyResponse(entity: Object, response: HttpResponse<any>): HttpResponse<any> {
+    const modifiersTypes = this.configuration.modifiers || [];
+
+    for (const modifierType of modifiersTypes) {
+      const modifier = this.injector.get(modifierType);
+
+      if (typeof modifier.modifyResponse === 'function') {
+        response = modifier.modifyResponse(entity, response);
+      }
+    }
+
+    return response;
   }
 }

@@ -15,7 +15,7 @@ export class UserListener extends Listener {
     super();
   }
 
-  public onPrePost(entity: Object) {
+  public onPreCreate(entity: Object) {
 
     if (entity instanceof User) {
       // this.entityManager.persist(new Log().setDate(new Date()));

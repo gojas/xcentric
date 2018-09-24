@@ -3,8 +3,8 @@ import {configuration, EntityManagerModuleConfiguration} from '../xcentric.entit
 import {EntityManagerStateService, State} from './entity-manager-state.service';
 
 export enum EventType {
-  PrePost = 1,
-  PrePut = 2,
+  PreCreate = 1,
+  PreUpdate = 2,
   PreDelete = 3,
 
   PreRemove = 4,
@@ -43,11 +43,11 @@ export class EntityManagerEventService {
   public runPreFlush(): EntityManagerEventService {
 
     for (const entity of this.state.getEntities(State.Create)) {
-      this.run(entity, EventType.PrePost);
+      this.run(entity, EventType.PreCreate);
     }
 
     for (const entity of this.state.getEntities(State.Update)) {
-      this.run(entity, EventType.PrePut);
+      this.run(entity, EventType.PreUpdate);
     }
 
     for (const entity of this.state.getEntities(State.Delete)) {
@@ -58,8 +58,8 @@ export class EntityManagerEventService {
   }
 
   private createMapping(): void {
-    this.eventMapping[EventType.PrePost] = 'prePost';
-    this.eventMapping[EventType.PrePut] = 'prePut';
+    this.eventMapping[EventType.PreCreate] = 'prePost';
+    this.eventMapping[EventType.PreUpdate] = 'prePut';
     this.eventMapping[EventType.PreDelete] = 'preDelete';
     this.eventMapping[EventType.PreRemove] = 'preRemove';
     this.eventMapping[EventType.PrePersist] = 'prePersist';
