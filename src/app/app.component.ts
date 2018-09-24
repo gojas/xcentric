@@ -1,9 +1,9 @@
 import {Component} from '@angular/core';
 import {EntityManagerService} from 'xcentric';
 import {User} from './entity-manager/user';
-import {HttpResponse} from '@angular/common/http';
 import {PaginatedMapper} from './entity-manager/paginated.mapper';
 import {BuilderResult} from '../../projects/xcentric/src/lib/entity-manager/service/builder/builder';
+import {PaginatedModifier} from './entity-manager/paginated.modifier';
 
 @Component({
   selector: 'app-root',
@@ -36,10 +36,19 @@ export class AppComponent {
         console.log(foundUser.getId(), foundUser.getFirstName());
       });
 
+    // this.em.getRepository(User)
+    //  .findMore()
+    //  .subscribe((foundUsers: User[]) => {
+    //    console.log(foundUsers);
+    //  });
+
     const builder = this.em.getRepository(User).getBuilder();
 
     builder
-      .setParams({limit: 10})
+      .setParams({
+        offset: 0,
+        limit: 1
+      })
       .setMapper(PaginatedMapper)
       .getMore()
       .subscribe((result: BuilderResult) => {

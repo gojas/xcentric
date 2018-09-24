@@ -14,6 +14,7 @@ import {UserRepository} from 'src/app/entity-manager/user.repository';
 import {CustomParser} from './entity-manager/custom.parser';
 import {TableModule} from 'primeng/table';
 import {ModularoModule} from './modularo/modularo.module';
+import {PaginatedModifier} from './entity-manager/paginated.modifier';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import {ModularoModule} from './modularo/modularo.module';
         UserListener
       ],
       modifiers: [
-        UserModifier
+        UserModifier,
+        PaginatedModifier
       ],
       repositories: [
         UserRepository

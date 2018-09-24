@@ -47,7 +47,7 @@ export class Builder {
     return this;
   }
 
-  public getSingle(): Observable<BuilderResult> {
+  public getSingle(): Observable<BuilderResult> { // todo :: getSingle to return SingleBuilderResult
     const entityTypeInstance = new this.entityType();
 
     const request = this.getRequest(entityTypeInstance);
@@ -62,7 +62,7 @@ export class Builder {
       }));
   }
 
-  public getMore(): Observable<BuilderResult> {
+  public getMore(): Observable<BuilderResult> { // todo :: getMore to return MoreBuilderResult
     const entityTypeInstance = new this.entityType();
 
     const request = this.getRequest(entityTypeInstance);

@@ -26,4 +26,22 @@ export class EntityManagerModifierService {
 
     return request;
   }
+
+  public modifyRequestWithModifiers(entity: Object, request: HttpRequest<any>, modifiers: any[]): HttpRequest<any> {
+    const modifiersTypes = this.configuration.modifiers || [];
+
+    for (const customModifier of modifiers) {
+      modifiersTypes.push(customModifier);
+    }
+
+    for (const modifierType of modifiersTypes) {
+      const modifier = this.injector.get(modifierType);
+
+      if (typeof modifier.modifyRequest === 'function') {
+        request = modifier.modifyRequest(entity, request);
+      }
+    }
+
+    return request;
+  }
 }

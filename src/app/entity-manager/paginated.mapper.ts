@@ -5,6 +5,6 @@ import {Mapper} from 'xcentric';
 export class PaginatedMapper extends Mapper {
 
   public map(data: any): any {
-    return data; // hm :D, no real example. so just return data
+    return data.data; // hm :D, no real example. so just return data
   }
 }
