@@ -9,6 +9,7 @@ import {Meta} from '../meta/meta';
 import {EntityManagerModifierService} from '../entity-manager-modifier.service';
 import {EntityManagerMetaDataService} from '../meta/entity-manager-meta-data.service';
 import {EntityManagerParserService} from '../parser/entity-manager-parser.service';
+import {Builder} from '../builder/builder';
 
 export interface EntityTypeAware {
     entityType: any;
@@ -40,6 +41,18 @@ export class EntityRepository implements EntityTypeAware {
 
     public findMore(params: any): Observable<Object[]> {
         return this.doFindMore(this.entityType, params);
+    }
+
+    public getBuilder(): Builder {
+      const builder = new Builder();
+
+      builder.connection = this.connection;
+      builder.parser = this.parser;
+      builder.meta = this.meta;
+      builder.entityType = this.entityType;
+      builder.modifier = this.modifier;
+
+      return builder;
     }
 
     private doFind(type: any, id: number): Observable<Object> {

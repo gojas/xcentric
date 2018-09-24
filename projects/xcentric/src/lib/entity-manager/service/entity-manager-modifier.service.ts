@@ -26,18 +26,4 @@ export class EntityManagerModifierService {
 
     return request;
   }
-
-  public modifyResponse(entity: Object, response: HttpResponse<any>): HttpResponse<any> {
-    const modifiersTypes = this.configuration.modifiers || [];
-
-    for (const modifierType of modifiersTypes) {
-      const modifier = this.injector.get(modifierType);
-
-      if (typeof modifier.modifyResponse === 'function') {
-        response = modifier.modifyResponse(entity, response);
-      }
-    }
-
-    return response;
-  }
 }
