@@ -7,7 +7,6 @@ import {ModuleComponent} from './modularo/module.component';
 import {SidebarModule} from 'primeng/sidebar';
 import {ButtonModule} from 'primeng/button';
 import {InputTextModule} from 'primeng/primeng';
-import {XcentricEntityManagerModule} from 'xcentric';
 import {UserListener} from './entity-manager/user.listener';
 import {UserModifier} from './entity-manager/user.modifier';
 import {UserRepository} from 'src/app/entity-manager/user.repository';
@@ -15,6 +14,7 @@ import {CustomParser} from './entity-manager/custom.parser';
 import {TableModule} from 'primeng/table';
 import {ModularoModule} from './modularo/modularo.module';
 import {PaginatedModifier} from './entity-manager/paginated.modifier';
+import {EntityManagerModule} from 'entity-manager';
 
 @NgModule({
   declarations: [
@@ -23,7 +23,7 @@ import {PaginatedModifier} from './entity-manager/paginated.modifier';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    XcentricEntityManagerModule.forRoot({
+    EntityManagerModule.forRoot({
       urlPrefix: 'http://puzzle.local/api/',
       parser: CustomParser,
       listeners: [
